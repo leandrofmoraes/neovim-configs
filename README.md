@@ -41,7 +41,7 @@ git clone https://github.com/leandrofmoraes/neovim-configs.git ~/.config/nvim &&
 
 | Running a Spring boot project using ToggleTerm plugin |
 |-|
-|![img](https://github.com/leandrofmoraes/dotfiles/blob/master/.screenshots/Screenshot_01.png)|
+|![img](https://github.com/leandrofmoraes/neovim-configs/blob/master/.screenshots/Screenshot_01.png)|
 
 #### Notes
 Other repositories were used as references and deserve to be cited.
