@@ -28,8 +28,12 @@
 ### Dependencies.
 
 - git > To install the config and plugins
+- [Nerd Fonts](https://www.nerdfonts.com/) > Used to display icons
 - npm > Used to install certain mason packages
-- ripgrep > Used to give telescope results
+- [ripgrep](https://github.com/BurntSushi/ripgrep) > Used to give telescope results
+- [Find file](https://github.com/sharkdp/fd) > Used in telescope to search for files
+- [Ranger](https://github.com/ranger/ranger) > Used as a file explorer (optional)
+
 ### How to Install ?
 
 - From your $HOME directory, copy and paste the command.
