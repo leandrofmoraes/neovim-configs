@@ -10,26 +10,31 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
-vim.opt.rtp:prepend(lazypath)
--- vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
+-- vim.opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 local opts = {
   git = { log = { '--since=3 days ago' } },
   ui = { custom_keys = { false } },
   install = { colorscheme = { 'tokyonight' } },
   checker = { enabled = true },
+  -- change_detection = { enabled = false },
+  defaults = {
+    lazy = true,
+    version = "*",
+  },
   performance = {
     rtp = {
       disabled_plugins = {
         'gzip',
+        -- 'matchit',
+        -- 'matchparen',
         'netrwPlugin',
         'tarPlugin',
         'tohtml',
         'tutor',
         'zipPlugin',
         'rplugin',
-        'matchparen',
-        'matchit',
       },
     },
   },

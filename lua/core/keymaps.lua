@@ -25,7 +25,7 @@ map('n', '<C-Left>', '<cmd>vertical resize -2<CR>', { desc = 'Decrease window wi
 map('n', '<C-Right>', '<cmd>vertical resize +2<CR>', { desc = 'Increase window width' })
 
 -- Lazy keymap
-map('n', '<leader>l', '<cmd>Lazy<CR>', { desc = 'Open lazy.nvim' })
+-- map('n', '<leader>P', '<cmd>Lazy<CR>', { desc = 'Plugins' })
 
 -- Better indenting
 map('v', '<', '<gv')
@@ -47,6 +47,25 @@ local function diagnostic_goto(next, severity)
     go({ severity = severity })
   end
 end
+
+local function buffer_delete()
+  local bd = require('mini.bufremove').delete
+  if vim.bo.modified then
+    local choice = vim.fn.confirm(('Save changes to %q?'):format(vim.fn.bufname()), '&Yes\n&No\nCancel')
+    if choice == 1 then -- Yes
+      vim.cmd.write()
+      bd(0)
+    elseif choice == 2 then -- No
+      bd(0, true)
+    end
+  else
+    bd(0)
+  end
+end
+
+map('n', '<leader>bc', buffer_delete, { desc = 'Close' })
+map('n', '<leader>B', buffer_delete, { desc = 'Buffer Close' })
+map('n', '<leader>bK', function() require('mini.bufremove').delete(0, true) end, { desc = 'Close forcefully' })
 
 map('n', ']d', diagnostic_goto(true), { desc = 'Next Diagnostic' })
 map('n', '[d', diagnostic_goto(false), { desc = 'Prev Diagnostic' })

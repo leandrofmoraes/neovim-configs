@@ -82,6 +82,11 @@ autocmd('BufReadPost', {
 -- Check if the file needs to be reloaded when it's changed
 autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, { group = augroup('checktime'), command = 'checktime' })
 
+-- autocmd({ 'BufEnter', 'InsertLeave' },{
+--   group = augroup('lsp_code_lens_refresh'),
+--   command = 'lua setup_codelens_refresh(vim.lsp.get_active_clients()[1], bufnr)'
+-- })
+--
 -- Set cmdheight to 1 when recording, and put it back to normal when it stops
 -- autocmd('RecordingEnter', {
 --   group = augroup('macro_cmdheight_on'),
@@ -97,27 +102,27 @@ autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, { group = augroup('checktim
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd({
-  'WinScrolled',
-  'BufWinEnter',
-  'CursorHold',
-  'InsertLeave',
-  'BufWritePost',
-  'TextChanged',
-  'TextChangedI',
-}, {
-  group = vim.api.nvim_create_augroup('barbecue#create_autocmd', { clear = true }),
-  callback = function()
-    local winid = vim.api.nvim_get_current_win()
-    local bufnr = vim.api.nvim_win_get_buf(winid)
-    require('barbecue.ui').update(winid)
-    if vim.bo[bufnr].filetype == 'neo-tree' then
-      require('neo-tree.ui.selector').set_source_selector({
-        winid = winid,
-      })
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd({
+--   'WinScrolled',
+--   'BufWinEnter',
+--   'CursorHold',
+--   'InsertLeave',
+--   'BufWritePost',
+--   'TextChanged',
+--   'TextChangedI',
+-- }, {
+--   group = vim.api.nvim_create_augroup('barbecue#create_autocmd', { clear = true }),
+--   callback = function()
+--     local winid = vim.api.nvim_get_current_win()
+--     local bufnr = vim.api.nvim_win_get_buf(winid)
+--     require('barbecue.ui').update(winid)
+--     if vim.bo[bufnr].filetype == 'neo-tree' then
+--       require('neo-tree.ui.selector').set_source_selector({
+--         winid = winid,
+--       })
+--     end
+--   end,
+-- })
 
 autocmd('ColorScheme', {
   group = augroup('nobg'),
@@ -141,4 +146,5 @@ autocmd('ColorScheme', {
     end
   end,
 })
+
 vim.opt.fillchars = 'eob: '

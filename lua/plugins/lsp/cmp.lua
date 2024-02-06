@@ -12,7 +12,7 @@ return {
       'hrsh7th/cmp-cmdline',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-nvim-lua',
-      'hrsh7th/cmp-nvim-lsp-signature-help',
+      -- 'hrsh7th/cmp-nvim-lsp-signature-help',
       'windwp/nvim-autopairs',
 
       -- For vsnip users
@@ -34,10 +34,11 @@ return {
       local luasnip = require('luasnip')
       local cmp = require('cmp')
       local defaults = require('cmp.config.default')()
-      local has_words_before = function()
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
-      end
+
+      -- local has_words_before = function()
+      --   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+      -- end
 
       return {
         -- completion = { completeopt = 'menu,menuone' },
@@ -45,6 +46,9 @@ return {
           behavior = require('cmp.types.cmp').ConfirmBehavior.Replace,
           select = false,
         },
+        -- confirmation = {
+        --   default_behavior = cmp.ConfirmBehavior.Replace,
+        -- },
         completion = {
           completeopt = 'menu,menuone,preview,noselect',
           keyword_length = 1,
@@ -60,8 +64,8 @@ return {
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
             elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
+            -- elseif has_words_before() then
+            --   cmp.complete()
             else
               fallback()
             end
@@ -79,7 +83,33 @@ return {
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ["<CR>"] = cmp.mapping(function(fallback)
+            local cmp_types = require("cmp.types.cmp")
+            local ConfirmBehavior = cmp_types.ConfirmBehavior
+            local confirm_opts = {
+              behavior = ConfirmBehavior.Replace,
+              select = false,
+            }
+            if cmp.visible() then
+              local is_insert_mode = function()
+                return vim.api.nvim_get_mode().mode:sub(1, 1) == "i"
+              end
+              if is_insert_mode() then -- prevent overwriting brackets
+                confirm_opts.behavior = ConfirmBehavior.Insert
+              end
+              local entry = cmp.get_selected_entry()
+              local is_copilot = entry and entry.source.name == "copilot"
+              if is_copilot then
+                confirm_opts.behavior = ConfirmBehavior.Replace
+                confirm_opts.select = true
+              end
+              if cmp.confirm(confirm_opts) then
+                return -- success, exit early
+              end
+            end
+            fallback() -- if not exited early, always fallback
+          end),
           ['<S-CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
           ['<C-CR>'] = function(fallback)
             cmp.abort()
@@ -99,68 +129,85 @@ return {
         }),
 
         sources = cmp.config.sources({
-          { name = 'nvim_lsp',                group_index = 2 },
-          { name = 'nvim_lua',                group_index = 2 },
-          { name = 'luasnip',                 group_index = 2 },
-          { name = 'buffer',                  group_index = 2 },
-          { name = 'async_path',              group_index = 2 },
-          { name = 'calc',                    group_index = 2 },
-          { name = 'nvim_lsp_signature_help', group_index = 2 },
-          { name = 'cmp_tabnine',             group_index = 2 },
           {
             name = 'copilot',
             group_index = 2,
             -- keyword_length = 0,
-            -- max_item_count = 3,
-            -- trigger_characters = {
-            --   {
-            --     '.',
-            --     ':',
-            --     '(',
-            --     "'",
-            --     '"',
-            --     '[',
-            --     ',',
-            --     '#',
-            --     '*',
-            --     '@',
-            --     '|',
-            --     '=',
-            --     '-',
-            --     '{',
-            --     '/',
-            --     '\\',
-            --     '+',
-            --     '?',
-            --     ' ',
-            --     -- "\t",
-            --     -- "\n",
-            --   },
-            -- },
+            max_item_count = 3,
+            trigger_characters = {
+              {
+                '.',
+                ':',
+                '(',
+                "'",
+                '"',
+                '[',
+                ',',
+                '#',
+                '*',
+                '@',
+                '|',
+                '=',
+                '-',
+                '{',
+                '/',
+                '\\',
+                '+',
+                '?',
+                ' ',
+                -- "\t",
+                -- "\n",
+              },
+            },
           },
           {
             name = 'nvim_lsp',
-            -- entry_filter = function(entry, ctx)
-            --   local kind = require('cmp.types.lsp').CompletionItemKind[entry:get_kind()]
-            --   if kind == 'Snippet' and ctx.prev_context.filetype == 'java' then
-            --     return false
-            --   end
-            --   return true
-            -- end,
+            entry_filter = function(entry, ctx)
+              local kind = require('cmp.types.lsp').CompletionItemKind[entry:get_kind()]
+              if kind == 'Snippet' and ctx.prev_context.filetype == 'java' then
+                return false
+              end
+              return true
+            end,
           },
+          { name = "path" },
+          { name = "luasnip" },
+          { name = "cmp_tabnine" },
+          { name = "nvim_lua" },
+          { name = "buffer" },
+          { name = "calc" },
+          { name = "emoji" },
+          { name = "treesitter" },
+          { name = "crates" },
+          { name = "tmux" },
+          -- { name = 'nvim_lsp_signature_help' },
+
+          -- { name = 'nvim_lsp',                group_index = 2 },
+          -- { name = 'path',                    group_index = 2 },
+          -- { name = 'luasnip',                 group_index = 2 },
+          -- { name = 'cmp_tabnine',             group_index = 2 },
+          -- { name = 'nvim_lua',                group_index = 2 },
+          -- { name = 'buffer',                  group_index = 2 },
+          -- -- { name = 'async_path',              group_index = 2 },
+          -- { name = 'calc',                    group_index = 2 },
+          -- { name = "emoji",                   group_index = 2},
+          -- { name = "treesitter",              group_index = 2},
+          -- { name = "crates",                  group_index = 2},
+          -- { name = "tmux",                    group_index = 2},
+          -- { name = 'nvim_lsp_signature_help', group_index = 2 },
         }),
 
         formatting = {
           icons = require('core.icons').kind,
           fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
-            vim_item.dup = { buffer = 1, path = 1, nvim_lsp = 0 }
+            -- vim_item.dup = { buffer = 1, path = 1, nvim_lsp = 0 }
             local icons = require('core.icons')
             local kind = require('lspkind').cmp_format({
               -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
               mode = 'symbol_text',
               ellipsis_char = '...',
-              maxwidth = 50,
+              maxwidth = 50; -- 50,
               -- symbol_map = source_mapping,
             })(entry, vim_item)
             local strings = vim.split(kind.kind, '%s', { trimempty = true })

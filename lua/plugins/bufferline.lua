@@ -5,6 +5,7 @@ return {
   version = '*',
   -- event = 'UIEnter',
   event = { 'BufAdd' },
+  -- event = { 'BufReadPost', 'BufNewFile' },
   keys = {
     { '<Tab>',      '<cmd>BufferLineCycleNext<CR>',                              desc = 'Next buffer' },
     { '<S-Tab>',    '<cmd>BufferLineCyclePrev<CR>',                              desc = 'Previous buffer' },

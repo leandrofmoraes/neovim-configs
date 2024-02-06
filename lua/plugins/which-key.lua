@@ -1,18 +1,26 @@
 local icons = require('core.icons')
+
 -- which-key.nvim
 return {
   'folke/which-key.nvim',
   -- keys = { '<leader>', '"', "'", '`', 'a', 'c', 'y', 'd', 'z', 'g', '[', ']', ';' },
   keys = { '<leader>', '"', "'", '`', 'a', 'c', 'y', 'd', 'z', 'g', '[', ']' },
   opts = {
+    -- mode = "n", -- NORMAL mode
+    -- prefix = "<leader>",
+    -- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+    -- silent = true, -- use `silent` when creating keymaps
+    -- noremap = true, -- use `noremap` when creating keymaps
+    -- nowait = true, -- use `nowait` when creating keymaps
     operators = { gc = 'Comments', gb = 'Block comments' },
     defaults = {
       mode = { 'n', 'v' },
-      ['g'] = { name = '+goto' },
+      -- ['g'] = { name = '+goto' },
       ['gc'] = { name = '+comments' },
       ['gb'] = { name = '+block comments' },
       ['gz'] = { name = '+surrounds' },
       ['g/'] = { name = '+split/Join' },
+      ['gG'] = { name = '+goto' },
       [']'] = { name = '+next' },
       ['['] = { name = '+prev' },
       ['<leader>q'] = { name = '+quit/session' },
@@ -23,6 +31,8 @@ return {
       ['<leader>D'] = { name = '+debugger' },
       ['<leader>i'] = { name = '+interpreter' },
       ['<leader>r'] = { name = '+refactoring' },
+      ['<leader>x'] = { name = '+toggle' },
+      -- ['<leader>l'] = { name = '+lsp' },
     },
     window = {
       border = 'double',        -- none, single, double, shadow
@@ -65,11 +75,28 @@ return {
     --   filetypes = { "TelescopePrompt" },
     -- },
     mappings = {
-      mode = { 'n', 'v' },
+      -- mode = { 'n', 'v' },
       ["<leader>;"] = { "<cmd>Alpha<CR>", "Dashboard" },
       ["<leader>w"] = { "<cmd>w!<CR>", "Save" },
       ["<leader>/"] = { require("Comment.api").toggle.linewise.current, "Comment current line" },
-      ["<leader>B"] = { "<cmd>BufferKill<CR>", "Close Buffer" },
+      -- ["<leader>B"] = { "<cmd>BufferKill<CR>", "Close Buffer" },
+      ["<leader>l"] = {
+        name = "lsp",
+        i = { "<cmd>LspInfo<cr>", "Info" },
+        I = { "<cmd>Mason<cr>", "Mason Info" },
+      },
+      ["<leader>P"] = {
+        name = "plugins",
+        i = { "<cmd>Lazy install<cr>", "Install" },
+        s = { "<cmd>Lazy sync<cr>", "Sync" },
+        S = { "<cmd>Lazy clear<cr>", "Status" },
+        c = { "<cmd>Lazy clean<cr>", "Clean" },
+        u = { "<cmd>Lazy update<cr>", "Update" },
+        p = { "<cmd>Lazy profile<cr>", "Profile" },
+        l = { "<cmd>Lazy log<cr>", "Log" },
+        d = { "<cmd>Lazy debug<cr>", "Debug" },
+      },
+      -- stylua: ignore
     }
   },
   config = function(_, opts)

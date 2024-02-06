@@ -37,7 +37,7 @@
 ### How to Install ?
 
 - From your $HOME directory, copy and paste the command.
-```
+```bash
 git clone https://github.com/leandrofmoraes/neovim-configs.git ~/.config/nvim && nvim
 ```
 

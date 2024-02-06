@@ -51,6 +51,14 @@ return {
     Octoface = '',
     Branch = '',
   },
+  gitsigns = {
+    Add = "┃",
+    Change = "┋",
+    Delete = "",
+    TopDelete = "",
+    ChangeDelete = "┃",
+    Untracked = "┃",
+  },
   ui = {
     ArrowCircleDown = '',
     ArrowCircleLeft = '',

@@ -1,13 +1,3 @@
-local buffers_list = function()
-  require('telescope.builtin').buffers({
-    previewer = false,
-    hidden = true,
-    theme = 'dropdown',
-    layout_strategy = 'horizontal',
-    layout_config = { height = 20, width = 60 },
-  })
-end
-
 local file_browser = function()
   local telescope = require('telescope')
 
@@ -31,11 +21,23 @@ local file_browser = function()
   })
 end
 
+local buffers_list = function()
+  require('telescope.builtin').buffers({
+    previewer = false,
+    hidden = true,
+    theme = 'dropdown',
+    layout_strategy = 'horizontal',
+    layout_config = { height = 20, width = 60 },
+  })
+end
+
 local live_grep = function()
   require('telescope.builtin').live_grep({
+    theme = 'ivy',
     sorting_strategy = 'ascending',
     layout_strategy = 'bottom_pane',
     prompt_prefix = '>> ',
+    prompt_title = "~ search by word ~",
   })
 end
 
@@ -44,6 +46,7 @@ return {
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope-file-browser.nvim',
+    'debugloop/telescope-undo.nvim',
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make',
@@ -54,7 +57,7 @@ return {
     {
       "ahmedkhalf/project.nvim",
       opts = {
-        manual_mode = true,
+        manual_mode = false,
       },
       event = "VeryLazy",
       config = function(_, opts)
@@ -67,6 +70,13 @@ return {
         { "<leader>fp", "<Cmd>Telescope projects<CR>", desc = "Projects" },
       },
     },
+    -- {
+    --   "nvim-telescope/telescope-project.nvim",
+    --   event = "BufWinEnter",
+    --   setup = function()
+    --     vim.cmd [[packadd telescope.nvim]]
+    --   end,
+    -- },
   },
   branch = '0.1.x',
   cmd = 'Telescope',
@@ -89,6 +99,8 @@ return {
     { '<leader>fs',       function() return require('telescope.builtin').lsp_document_symbols() end,     desc = 'Document symbols' },
     { '<leader>ft',       '<cmd>TodoTelescope<CR>',                                                      desc = 'Todo' },
     { '<leader>fT',       '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<CR>',                              desc = 'Todo/Fix/Fixme' },
+    { '<leader>fu',       '<cmd>Telescope undo<cr>',                                                     desc = 'Undo History' },
+    { ';u',               '<cmd>Telescope undo<cr>',                                                     desc = 'Undo History' },
     { '<leader>go',       function() return require('telescope.builtin').git_status() end,               desc = 'Search through changed files' },
     { '<leader>gb',       function() return require('telescope.builtin').git_branches() end,             desc = 'Search through git branches' },
     { '<leader>gc',       function() return require('telescope.builtin').git_commits() end,              desc = 'Search and checkout git commits' },
@@ -150,37 +162,53 @@ return {
   },
   opts = function()
     -- File and text search in hidden files and directories
-    local telescopeConfig = require('telescope.config')
     -- local telescope = require('telescope')
     local actions = require('telescope.actions')
     local fb_actions = require('telescope').extensions.file_browser.actions
 
     -- Clone the default Telescope configuration
-    local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+    -- local telescopeConfig = require('telescope.config')
+    -- local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
 
     -- I want to search in hidden/dot files.
-    table.insert(vimgrep_arguments, '--hidden')
+    -- table.insert(vimgrep_arguments, '--hidden')
     -- I don't want to search in the `.git` directory.
-    table.insert(vimgrep_arguments, '--glob')
-    table.insert(vimgrep_arguments, '!**/.git/*')
+    -- table.insert(vimgrep_arguments, '--glob')
+    -- table.insert(vimgrep_arguments, '!**/.git/*')
 
     return {
       defaults = {
+        theme = "dropdown",
         prompt_prefix = ' ',
         selection_caret = ' ',
         mappings = { n = { ['q'] = actions.close } },
         -- mappings = { n = {} },
-        vimgrep_arguments = vimgrep_arguments,
         -- theme = 'tokyonight',
         -- path_display = { 'smart' },
+        initial_mode = "insert",
+        selection_strategy = "reset",
         file_ignore_patterns = { '.git/' },
         -- layout_strategy = 'horizontal',
+        -- layout_strategy = nil,
         layout_strategy = 'bottom_pane',
         layout_config = { prompt_position = 'top' },
         -- layout_config = {},
+        -- sorting_strategy = nil,
         sorting_strategy = 'ascending',
         wrap_results = true,
-        winblend = 0,
+        -- winblend = 0,
+        -- vimgrep_arguments = vimgrep_arguments, //clone the default configuration
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+          "--glob=!.git/",
+        },
       },
       -- pickers = { find_files = { find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' } } },
       pickers = {
@@ -221,9 +249,30 @@ return {
             },
           },
         },
+
+        undo = {
+          use_delta = true,
+          side_by_side = true,
+          layout_strategy = "vertical",
+          layout_config = {
+            horizontal = {
+              -- prompt_position = "top",
+              preview_width = 0.4,
+              results_width = 0.8,
+            },
+            vertical = {
+              mirror = false,
+            },
+            preview_height = 0.8,
+          },
+          -- layout_config = {
+          --   preview_height = 0.8,
+          -- },
+        },
       },
       require('telescope').load_extension('fzf'),
       require('telescope').load_extension('file_browser'),
+      require("telescope").load_extension('undo'),
     }
   end,
 }

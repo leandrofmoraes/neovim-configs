@@ -26,11 +26,35 @@ return {
         'toml',
         'ssh_config',
       },
-      highlight = { enable = true },
-      indent = { enable = true },
+      -- highlight = { enable = true },
+      highlight = {
+        enable = true,
+        use_languagetree = true,
+        additional_vim_regex_highlighting = false,
+      },
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+        config = {
+          -- Languages that have a single comment style
+          typescript = "// %s",
+          css = "/* %s */",
+          scss = "/* %s */",
+          html = "<!-- %s -->",
+          svelte = "<!-- %s -->",
+          vue = "<!-- %s -->",
+          json = "",
+        },
+      },
+      -- indent = { enable = true },
+      indent = { enable = true, disable = { "yaml", "python" } },
+      autotag = { enable = false },
+
+      -- Automatically install missing parsers when entering buffer
       auto_install = true,
       -- vim-matchup config
       matchup = { enable = true, include_match_words = true, enable_quotes = true },
+
     },
     config = function(_, opts)
       require('nvim-treesitter.configs').setup(opts)

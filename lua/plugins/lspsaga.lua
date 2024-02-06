@@ -1,6 +1,6 @@
 return {
   -- "glepnir/lspsaga.nvim",
-  enable = false,
+  -- enable = false,
   'nvimdev/lspsaga.nvim',
   dependencies = {
     'nvim-treesitter/nvim-treesitter', -- optional
@@ -24,6 +24,15 @@ return {
       finder_definition_icon = '  ',
       finder_reference_icon = '  ',
       max_preview_lines = 10,
+
+      lightbulb = {
+        enable = false,
+        sign = true, -- show sign in status column
+        debounce = 10, -- timer debounce
+        sign_priority = 40, -- sign priority
+        virtual_text = true, -- show virtual text at the end of line
+        enable_in_insert = true,
+      },
 
       finder_action_keys = {
         open = 'o',

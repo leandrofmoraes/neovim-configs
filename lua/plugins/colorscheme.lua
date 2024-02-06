@@ -38,6 +38,7 @@ return {
         hl.TelescopePreviewTitle = { bg = transparent, fg = blue }
         --   hl.TelescopeResultsTitle = { bg = c.bg_dark, fg = c.bg_dark }
         hl.TelescopeResultsTitle = { bg = transparent, fg = blue }
+        hl.TroubleNormal = { bg = transparent }
         hl.NeoTreeNormal = { bg = transparent, fg = blue }
         hl.NeoTreeNormalNC = { bg = transparent, fg = blue }
         -- Whichkey

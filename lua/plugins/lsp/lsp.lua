@@ -185,94 +185,14 @@ return {
         desc = 'Rename',
       },
     },
-    -- opts = { input_buffer_type = 'dressing' },
-    opts = { input_buffer_type = 'noice' },
-  },
-
-  -- nvim-navic
-  {
-    'SmiteshP/nvim-navic',
-    requires = 'neovim/nvim-lspconfig',
-    event = 'LspAttach',
-    -- event = 'User FileOpened',
     opts = {
-      highlight = true,
-      lsp = { auto_attach = true },
-      lazy_update_context = true,
-      icons = require('core.icons').kind,
-      -- icons = {
-      --   Array = ' ',
-      --   Boolean = ' ',
-      --   Class = ' ',
-      --   Color = ' ',
-      --   Constant = ' ',
-      --   Constructor = ' ',
-      --   Copilot = ' ',
-      --   Enum = ' ',
-      --   EnumMember = ' ',
-      --   Event = ' ',
-      --   Field = ' ',
-      --   File = ' ',
-      --   Folder = ' ',
-      --   Function = ' ',
-      --   Interface = ' ',
-      --   Key = ' ',
-      --   Keyword = ' ',
-      --   Method = ' ',
-      --   Module = ' ',
-      --   Namespace = ' ',
-      --   Null = ' ',
-      --   Number = ' ',
-      --   Object = ' ',
-      --   Operator = ' ',
-      --   Package = ' ',
-      --   Property = ' ',
-      --   Reference = ' ',
-      --   Snippet = ' ',
-      --   String = ' ',
-      --   Struct = ' ',
-      --   Text = ' ',
-      --   TypeParameter = ' ',
-      --   Unit = ' ',
-      --   Value = ' ',
-      --   Variable = ' ',
-      -- },
-      on_attach = function(client, bufnr)
-        local navic = require('nvim-navic')
-        -- navic.attach(client, bufnr)
-        if client.server_capabilities.documentSymbolProvider then
-          navic.attach(client, bufnr)
-        end
-      end,
-    },
-  },
-  -- {
-  --   'LunarVim/breadcrumbs.nvim',
-  --   dependencies = { 'SmiteshP/nvim-navic' },
-  --   -- event = 'User FileOpened',
-  --   opts = {
-  --     lsp = {
-  --       auto_attach = true,
-  --     },
-  --   },
-  -- },
-
-  {
-    'utilyre/barbecue.nvim',
-    name = 'barbecue',
-    version = '*',
-    dependencies = {
-      'SmiteshP/nvim-navic',
-      -- 'nvim-tree/nvim-web-devicons', -- optional dependency
-    },
-    event = 'LspAttach',
-    opts = {
-      attach_navic = false,
-      exclude_filetypes = {
-        'gitcommit',
-        'toggleterm',
-        'nvim-tree',
-      },
+      cmd_name = "IncRename", -- the name of the command
+      hl_group = "Substitute", -- the highlight group used for highlighting the identifier's new name
+      preview_empty_name = false, -- whether an empty new name should be previewed; if false the command preview will be cancelled instead
+      show_message = true, -- whether to display a `Renamed m instances in n files` message after a rename operation
+      post_hook = nil, -- callback to run after renaming, receives the result table (from LSP handler) as an argument
+      -- input_buffer_type = "dressing", -- the type of the external input buffer to use (the only supported value is currently "dressing")
+      input_buffer_type = 'noice'
     },
   },
 
@@ -299,6 +219,24 @@ return {
   --      })
   --    end,
   --  },
+
+  -- {
+  --     'VidocqH/lsp-lens.nvim',
+  --     event = 'LspAttach',
+  --     opts = {
+  --       enable = true,
+  --       include_declaration = true,      -- Reference include declaration
+  --       sections = {                      -- Enable / Disable specific request, formatter example looks 'Format Requests'
+  --         definition = false,
+  --         references = true,
+  --         implements = true,
+  --         git_authors = true,
+  --       },
+  --       ignore_filetype = {
+  --         "prisma",
+  --       },
+  --     }
+  --   },
 
   -- actions-preview.nvim
   {
@@ -342,8 +280,11 @@ return {
   -- nvim-dap
   {
     'mfussenegger/nvim-dap',
+    lazy = true,
     dependencies = {
       -- nvim-dap-virtual-text
+      { "rcarriga/nvim-dap-ui" },
+
       { 'theHamsta/nvim-dap-virtual-text', opts = { highlight_new_as_changed = true } },
 
       -- mason-nvim-dap.nvim
@@ -372,6 +313,7 @@ return {
       -- nvim-dap-ui
       {
         'rcarriga/nvim-dap-ui',
+        lazy = true,
         keys = {
           -- stylua: ignore start
           { '<leader>du', function() return require('dapui').toggle() end, desc = 'Dap UI' },
@@ -421,11 +363,9 @@ return {
 
   { 'mxsdev/nvim-dap-vscode-js' },
 
+  -- SchemaStore
   {
-    'ray-x/lsp_signature.nvim',
-    event = 'BufRead',
-    config = function()
-      require('lsp_signature').on_attach()
-    end,
+    "b0o/schemastore.nvim",
+    lazy = true,
   },
 }

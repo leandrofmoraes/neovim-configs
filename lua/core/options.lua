@@ -43,12 +43,12 @@ local options = {
   -- Code folding
   foldlevel = 99,
   foldlevelstart = 99,
-  -- foldcolumn = '1',
+  foldcolumn = '0', -- Don't show the foldcolumn
+  foldenable = true,
   -- foldmethod = "manual", -- folding, set to "expr" for treesitter based folding
   foldmethod = 'expr',
   -- foldexpr = "", -- set to "nvim_treesitter#foldexpr()" for treesitter based folding
   foldexpr = 'nvim_treesitter#foldexpr()',
-  foldenable = true,
 
   -- Decrease update time
   updatetime = 100, -- faster completion
@@ -79,7 +79,15 @@ local options = {
   list = true,
 
   -- Fill chars
-  fillchars = { eob = ' ', diff = '╱', fold = ' ', foldsep = ' ', foldopen = '', foldclose = '' },
+  fillchars = {
+    eob = ' ', -- suppress ~ at EndOfBuffer
+    diff = '╱', -- alternatives = ⣿ ░ ─
+    msgsep = ' ', -- alternatives: ‾ ─
+    fold = ' ',
+    foldsep = ' ',
+    foldopen = '',
+    foldclose = '',
+  },
 
   -- Enable lazy redraw for performance
   -- lazyredraw = true,
@@ -96,14 +104,13 @@ local options = {
   -- Hide the command line unless needed
   cmdheight = 1, -- 0 -- more space in the neovim command line for displaying messages
 
-  -- Use ripgrep as the grep program for neovim
-  grepprg = 'rg --vimgrep',
+  grepprg = 'rg --vimgrep', -- Use ripgrep as the grep program for neovim
 
-  -- Set the grep format
-  grepformat = '%f:%l:%c:%m',
+  grepformat = '%f:%l:%c:%m', -- Set the grep format
 
   -- Set completion options
-  completeopt = 'menu,menuone,noselect', -- "menuone", -- Set completeopt to have a better completion experience
+  -- completeopt = 'menu,menuone,noselect', -- "menuone", -- Set completeopt to have a better completion experience
+  completeopt = { "menuone", "noselect", "preview" },
 
   -- Set key timeout to 1000ms
   timeoutlen = 1000, -- time to wait for a mapped sequence to complete (in milliseconds)
@@ -125,8 +132,7 @@ local options = {
   -- Allow cursor to move where this is no text is visual block mode
   virtualedit = 'block',
 
-  -- Command-line completion mode
-  wildmode = 'longest:full,full',
+  wildmode = 'longest:full,full', -- Command-line completion mode
 
   -- Session save options
   -- sessionoptions = { 'buffers', 'curdir', 'tabpages', 'winsize', 'help', 'globals', 'skiprtp', 'folds' },
@@ -238,3 +244,13 @@ local default_diagnostic_config = {
   },
 }
 vim.diagnostic.config(default_diagnostic_config)
+
+-- Enable auto format
+-- vim.g.autoformat = true
+
+-- Root dir detection
+-- Each entry can be:
+-- * the name of a detector function like `lsp` or `cwd`
+-- * a pattern or array of patterns like `.git` or `lua`.
+-- * a function with signature `function(buf) -> string|string[]`
+-- vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }

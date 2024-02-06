@@ -41,12 +41,10 @@ return {
     ft = { "markdown" },
   },
 
-  {
-    'tzachar/cmp-tabnine',
-    build = './install.sh',
-    dependencies = 'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-  },
+  -- {
+  --   "soulis-1256/hoverhints.nvim"
+  -- },
+
   {
     'barrett-ruth/live-server.nvim',
     build = 'yarn global add live-server',
@@ -90,4 +88,10 @@ return {
   },
   { 'rstacruz/sparkup' },
   { 'mattn/emmet-vim' },
+
+  {
+    enabled = false,
+    "lunarvim/bigfile.nvim",
+    event = { "FileReadPre", "BufReadPre", "User FileOpened" },
+  },
 }
