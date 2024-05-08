@@ -313,6 +313,7 @@ return {
       -- nvim-dap-ui
       {
         'rcarriga/nvim-dap-ui',
+        dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
         lazy = true,
         keys = {
           -- stylua: ignore start

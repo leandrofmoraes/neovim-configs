@@ -18,10 +18,11 @@
 ### Features.
 - Customized [Tokyonight](https://github.com/folke/tokyonight.nvim) colorscheme
 - Fast search for files and preview using [telescope](https://github.com/nvim-telescope/telescope.nvim) plugin
+- Browse for references and diagnostics using LSP and [trouble-nvim](https://github.com/folke/trouble.nvim)
 - Customized lualine sessions
 - Modules leveraged from [LazyVim](https://github.com/LazyVim/LazyVim)
 - Centralized plugin configuration
-- Complete IDE for Java, C/C++, Lua, JavaScript and other languages
+- Complete IDE for Java, C/C++, Lua and Web development (HTML, CSS, JS, TS)
 
 #####
 
