@@ -38,6 +38,7 @@ return{
         },
       },
       window = {
+        position = 'left', --'left'|'right'
         mappings = {
           ['h'] = {
             function(state)

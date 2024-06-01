@@ -1,3 +1,7 @@
+
+--> left_sep   :          
+--> right_sep  :          
+
 local icons = require('core.icons')
 
 -- local copilot = function(_, opts)
@@ -34,7 +38,7 @@ local icons = require('core.icons')
 --   })
 -- end
 
-local function lsp_clients()
+local function getLspClients()
   return require('lsp-progress').progress({
     -- format = function(messages)
     format = function()
@@ -44,7 +48,7 @@ local function lsp_clients()
       --   return table.concat(messages, ' ')
       -- end
       local client_names = {}
-      for i, client in ipairs(active_clients) do
+      for _, client in ipairs(active_clients) do
         if client and client.name ~= '' then
           if client.name == 'copilot' then
             table.insert(client_names, icons.git.Octoface)
@@ -101,6 +105,12 @@ local diff = {
   cond = nil,
 }
 
+local lsp = {
+  function()
+    return getLspClients()
+  end
+}
+
 local my_theme = {
   normal = {
     a = { fg = colors.dblue, bg = colors.blue, gui = 'bold' },
@@ -133,6 +143,14 @@ local my_theme = {
     c = { bg = colors.bg, fg = colors.fg },
   },
 }
+local modes = {
+    "mode",
+    -- color = function()
+    --     local mode_color = modecolor
+    --     return { bg = mode_color[vim.fn.mode()], fg = colors.bg_dark, gui = "bold" }
+    -- end,
+    separator = { left = "", right = "" },
+}
 
 local filetype = {
   'filetype',
@@ -150,6 +168,12 @@ local filetype = {
 --   end,
 --   color_correction = 'static',
 -- }
+local betterEscape = {
+  function()
+    local ok, m = pcall(require, 'better_escape')
+    return ok and m.waiting and '✺' or ''
+  end,
+}
 
 local dap = {
   function()
@@ -159,6 +183,17 @@ local dap = {
     return package.loaded['dap'] and require('dap').status() ~= ''
   end,
 }
+
+local dia = {
+  'diagnostics',
+  sources = { 'nvim_lsp', 'nvim_diagnostic' }
+}
+
+local progress = {
+  'progress',
+  separator = { right = "" },
+}
+
 return {
   {
     'linrongbin16/lsp-progress.nvim',
@@ -185,22 +220,13 @@ return {
         },
       },
       sections = {
-        lualine_a = { 'mode' },
-        lualine_b = {
-          'branch',
-          diff,
-          {
-            function()
-              local ok, m = pcall(require, 'better_escape')
-              return ok and m.waiting and '✺' or ''
-            end,
-          },
-        },
+        lualine_a = { modes },
+        lualine_b = { 'branch', diff, betterEscape},
         -- lualine_c = { navic },
-        lualine_c = { lsp_clients },
-        lualine_x = { dap, { 'diagnostics', sources = { 'nvim_lsp', 'nvim_diagnostic' } } },
+        lualine_c = { lsp },
+        lualine_x = { dap, dia },
         lualine_y = { filetype, 'filename', 'fileformat' },
-        lualine_z = { 'location', 'progress' },
+        lualine_z = { 'location', progress },
       },
       extensions = {
         'man',

@@ -15,7 +15,10 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 local opts = {
   git = { log = { '--since=3 days ago' } },
-  ui = { custom_keys = { false } },
+  ui = {
+    custom_keys = { false },
+    border = "double", -- "double" | "single" | "shadow" | "none" | "rounded" | "solid"
+  },
   install = { colorscheme = { 'tokyonight' } },
   checker = { enabled = true },
   -- change_detection = { enabled = false },

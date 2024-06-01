@@ -332,6 +332,11 @@ return {
       capabilities = capabilities,
     })
 
+    -- Dockerfile
+    lspconfig.dockerls.setup({
+      capabilities = capabilities,
+    })
+
     -- Java
     -- lspconfig.jdtls.setup({
     --   capabilities = capabilities,

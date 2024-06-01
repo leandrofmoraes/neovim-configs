@@ -17,7 +17,7 @@ return {
         local blue = '#62AEEF'
         local dblue = '#05142F'
         local pink = '#B542FF'
-        local grey = '#1C1C1C'
+        -- local grey = '#1C1C1C'
         hl.Normal = { bg = transparent, fg = blue }
         hl.NormalFloat = { bg = transparent, fg = blue }
         hl.MsgArea = { bg = transparent, fg = blue }
