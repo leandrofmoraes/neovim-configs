@@ -36,8 +36,8 @@ local options = {
   -- Tab config
   expandtab = true,   -- convert tabs to spaces
   smartindent = true, -- make indenting smarter again
-  shiftwidth = 2,     -- the number of spaces inserted for each indentation
-  tabstop = 2,        -- insert 2 spaces for a tab
+  shiftwidth = 4,     -- the number of spaces inserted for each indentation
+  tabstop = 4,        -- insert 2 spaces for a tab
   shiftround = true,
 
   -- Code folding

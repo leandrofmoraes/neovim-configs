@@ -2,6 +2,9 @@ return {
   -- nvim-treesitter
   {
     'nvim-treesitter/nvim-treesitter',
+    -- commit = '9a7ad2f', --Temporary fix for treesitter issue
+    -- commit = 'e5af2d7fdcdcbafd75e0bdb4e53d3be55c5761c4',
+    -- commit = '7b04b398f868563cac37ae90baffd7c3dca513fe',
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufNewFile' },
     opts = {
@@ -53,7 +56,7 @@ return {
       -- Automatically install missing parsers when entering buffer
       auto_install = true,
       -- vim-matchup config
-      matchup = { enable = true, include_match_words = true, enable_quotes = true },
+      matchup = { enable = true, include_match_words = true, enable_quotes = true }, -- disabled to fix issue with javascript module
 
     },
     config = function(_, opts)
@@ -101,6 +104,7 @@ return {
   {
     --   'hiphish/rainbow-delimiters.nvim',
     'HiPhish/rainbow-delimiters.nvim',
+    -- commit = 'eb3e304523f0fc08eb568855fea55598ba5ccf42',
     dependencies = 'nvim-treesitter/nvim-treesitter',
     event = { 'BufReadPost', 'BufNewFile' },
   },
@@ -111,7 +115,7 @@ return {
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
-    commit = "3d08501caef2329aba5121b753e903904088f7e6", -- release v3.5.4
+    -- commit = "3d08501caef2329aba5121b753e903904088f7e6", -- release v3.5.4
     dependencies = 'nvim-treesitter/nvim-treesitter',
     event = { 'BufReadPost', 'BufNewFile' },
     opts = {
@@ -121,3 +125,4 @@ return {
     },
   },
 }
+

@@ -68,6 +68,8 @@ end
 
 return {
   'neovim/nvim-lspconfig',
+  -- commit = '4d38bec',
+  -- commit = '5e54173da4e0ffd8e9559c0a1fddfb3b7df97bec',
   event = { 'BufReadPre', 'BufNewFile' },
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
@@ -213,32 +215,42 @@ return {
     -- Managing language servers individually
     -- pyright
     lspconfig.pyright.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
     })
 
     -- tsserver
-    lspconfig.tsserver.setup({
-      -- capabilities = capabilities,
+    -- lspconfig.tsserver.setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    --   -- settings = {
+    --   --   completions = {
+    --   --     completeFunctionCalls = true
+    --   --   }
+    --   -- }
+    -- })
+    -- if Util.lsp.get_config("denols") and Util.lsp.get_config("tsserver") then
+    --   local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
+    --   Util.lsp.disable("tsserver", is_deno)
+    --   Util.lsp.disable("denols", function(root_dir)
+    --     return not is_deno(root_dir)
+    --   end)
+    -- end
+
+    -- VTSLS
+    lspconfig.vtsls.setup({
       capabilities = capabilities,
-      on_attach = on_attach,
-      -- settings = {
-      --   completions = {
-      --     completeFunctionCalls = true
-      --   }
-      -- }
+      ft = {
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+      },
+      -- enabled = not env.NVIM_USER_USE_TSSERVER,
+      dependencies = { "nvim-lspconfig" },
     })
-    if Util.lsp.get_config("denols") and Util.lsp.get_config("tsserver") then
-      local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
-      Util.lsp.disable("tsserver", is_deno)
-      Util.lsp.disable("denols", function(root_dir)
-        return not is_deno(root_dir)
-      end)
-    end
 
     -- rust_analyzer
     lspconfig.rust_analyzer.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
       -- Server-specific settings. See `:help lspconfig-setup`
       settings = {
@@ -246,30 +258,8 @@ return {
       },
     })
 
-    -- html
-    lspconfig.html.setup({
-      -- capabilities = capabilities,
-      capabilities = capabilities,
-    })
-    -- configure emmet language server
-    lspconfig.emmet_ls.setup({
-      -- capabilities = capabilities,
-      capabilities = capabilities,
-      filetypes = {
-        'html',
-        -- 'typescriptreact',
-        -- 'javascriptreact',
-        -- 'css',
-        -- 'sass',
-        -- 'scss',
-        -- 'less',
-        -- 'svelte',
-      },
-    })
-
     -- configure sql server
     lspconfig["sqlls"].setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
       on_attach = on_attach,
       root_dir = function(_)
@@ -282,29 +272,24 @@ return {
     })
 
     lspconfig.yamlls.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     lspconfig.taplo.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
     })
 
     lspconfig.marksman.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
     })
 
     lspconfig.lemminx.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
     })
 
     -- Lua LS
     lspconfig.lua_ls.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
       settings = {
         Lua = {
@@ -318,9 +303,55 @@ return {
       },
     })
 
+    -- html
+    lspconfig.html.setup({
+      capabilities = capabilities,
+    })
+
+    -- configure emmet language server
+
+    -- lspconfig.emmet_ls.setup({
+    --   -- on_attach = on_attach,
+    --   capabilities = capabilities,
+    --   filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+    --   init_options = {
+    --     html = {
+    --       options = {
+    --         -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+    --         ["bem.enabled"] = true,
+    --       },
+    --     },
+    --   }
+    -- })
+
+    lspconfig.emmet_language_server.setup({
+      filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact" },
+      -- Read more about this options in the [vscode docs](https://code.visualstudio.com/docs/editor/emmet#_emmet-configuration).
+      -- **Note:** only the options listed in the table are supported.
+      init_options = {
+        ---@type table<string, string>
+        includeLanguages = {},
+        --- @type string[]
+        excludeLanguages = {},
+        --- @type string[]
+        extensionsPath = {},
+        --- @type table<string, any> [Emmet Docs](https://docs.emmet.io/customization/preferences/)
+        preferences = {},
+        --- @type boolean Defaults to `true`
+        showAbbreviationSuggestions = true,
+        --- @type "always" | "never" Defaults to `"always"`
+        showExpandedAbbreviation = "always",
+        --- @type boolean Defaults to `false`
+        showSuggestionsAsSnippets = false,
+        --- @type table<string, any> [Emmet Docs](https://docs.emmet.io/customization/syntax-profiles/)
+        syntaxProfiles = {},
+        --- @type table<string, string> [Emmet Docs](https://docs.emmet.io/customization/snippets/#variables)
+        variables = {},
+      },
+    })
+
     -- CSS LS
     lspconfig.cssls.setup({
-      -- capabilities = capabilities,
       capabilities = capabilities,
     })
 
@@ -328,7 +359,11 @@ return {
     -- Support for tailwind auto completion
     -- install the tailwind server : "sudo npm install -g @tailwindcss/language-server"
     lspconfig.tailwindcss.setup({
-      -- capabilities = capabilities,
+      capabilities = capabilities,
+    })
+
+    -- Angular
+    lspconfig.angularls.setup({
       capabilities = capabilities,
     })
 

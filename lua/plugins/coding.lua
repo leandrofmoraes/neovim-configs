@@ -87,7 +87,8 @@ return {
     end,
   },
   { 'rstacruz/sparkup' },
-  { 'mattn/emmet-vim' },
+  -- { 'mattn/emmet-vim' },
+  { "olrtg/nvim-emmet" },
 
   {
     enabled = false,

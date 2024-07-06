@@ -42,7 +42,8 @@ local function getLspClients()
   return require('lsp-progress').progress({
     -- format = function(messages)
     format = function()
-      local active_clients = vim.lsp.get_active_clients()
+      local active_clients = vim.lsp.get_active_clients() --deprecated in v0.10.0
+      -- local active_clients = vim.lsp.get_clients()
       -- if #messages > 0 then
       --   -- return ' LSP:' .. table.concat(messages, ' ')
       --   return table.concat(messages, ' ')
@@ -197,6 +198,7 @@ local progress = {
 return {
   {
     'linrongbin16/lsp-progress.nvim',
+    -- commit = '70dfe3b',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('lsp-progress').setup()

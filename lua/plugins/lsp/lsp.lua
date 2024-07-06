@@ -164,6 +164,17 @@ return {
     -- },
   },
 
+  -- Neovim API completions
+  -- {
+  --   "folke/lazydev.nvim",
+  --   ft = "lua",
+  --   opts = {
+  --     library = {
+  --       "lazy.nvim",
+  --     },
+  --   },
+  -- },
+
   -- inc-rename.nvim
   {
     'smjonas/inc-rename.nvim',

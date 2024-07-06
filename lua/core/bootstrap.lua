@@ -20,7 +20,12 @@ local opts = {
     border = "double", -- "double" | "single" | "shadow" | "none" | "rounded" | "solid"
   },
   install = { colorscheme = { 'tokyonight' } },
-  checker = { enabled = true },
+  checker = {
+    enabled = true,
+    notify = true, -- get a notification when new updates are found
+    -- frequency = 3600, -- check for updates every hour
+    frequency = 604800, -- check for updates every week
+  },
   -- change_detection = { enabled = false },
   defaults = {
     lazy = true,
