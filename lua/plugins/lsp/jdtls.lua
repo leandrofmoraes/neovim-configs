@@ -140,6 +140,7 @@ return {
       -- if nvim-dap is enabled with java debug/test.
       local mason_registry = require("mason-registry")
       local bundles = {} ---@type string[]
+      vim.list_extend(bundles, require("spring_boot").java_extensions())
       if opts.dap and Util.has("nvim-dap") and mason_registry.is_installed("java-debug-adapter") then
         local java_dbg_pkg = mason_registry.get_package("java-debug-adapter")
         local java_dbg_path = java_dbg_pkg:get_install_path()
@@ -403,6 +404,14 @@ return {
           },
         },
       }
+    },
+  },
+  {
+    "JavaHello/spring-boot.nvim",
+    ft = "java",
+    dependencies = {
+      "mfussenegger/nvim-jdtls", -- or nvim-java, nvim-lspconfig
+      "ibhagwan/fzf-lua", -- optional
     },
   }
 }
