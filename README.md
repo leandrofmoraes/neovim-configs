@@ -4,7 +4,7 @@
 <p>This repository contains personal settings, which I use in neovim. In addition to paying special attention to appearance and usability, the main objective is to have a centralized configuration, easier to maintain and control, moving away a little (but not completely) from the encapsulation of distributions.</p>
 
 <p align="center">
-<img src="https://github.com/leandrofmoraes/neovim-configs/blob/master/.screenshots/Screenshot_02.png" align="right" width="400px">
+<img src="https://github.com/leandrofmoraes/neovim-configs/blob/master/.screenshots/leovim_01.png" align="right" width="400px">
 </p>
 
 ### Contents
@@ -44,9 +44,9 @@ git clone https://github.com/leandrofmoraes/neovim-configs.git ~/.config/nvim &&
 
 ### More Screenshots
 
-| Running a Spring boot project using ToggleTerm plugin |
-|-|
-|![img](https://github.com/leandrofmoraes/neovim-configs/blob/master/.screenshots/Screenshot_01.png)|
+| Running a Spring boot project using ToggleTerm plugin | Editing a Lua file
+|-|-|
+|![img](https://github.com/leandrofmoraes/neovim-configs/blob/master/.screenshots/Screenshot_01.png)|![img](https://github.com/leandrofmoraes/neovim-configs/blob/master/.screenshots/leovim_02.png)
 
 #### Notes
 Other repositories were used as references and deserve to be cited.
