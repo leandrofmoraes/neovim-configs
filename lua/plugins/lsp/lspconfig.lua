@@ -363,9 +363,9 @@ return {
     })
 
     -- Angular
-    lspconfig.angularls.setup({
-      capabilities = capabilities,
-    })
+    -- lspconfig.angularls.setup({
+    --   capabilities = capabilities,
+    -- })
 
     -- Dockerfile
     lspconfig.dockerls.setup({
