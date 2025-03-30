@@ -1,29 +1,35 @@
 -- local opt = vim.opt
 local g = vim.g
 
+-- Set space as my leader key
+g.mapleader = ' '
+g.maplocalleader = ' '
+
 local options = {
   -- Cursor highlighting
   cursorline = true, -- highlight the current line
   cursorcolumn = false,
 
   -- Pane splitting
-  splitbelow = true, -- force all horizontal splits to go below current window
-  splitright = true, -- force all vertical splits to go to the right of current window
+  splitbelow = true,    -- force all horizontal splits to go below current window
+  splitright = true,    -- force all vertical splits to go to the right of current window
 
-  -- Keep cursor to the same screen line when opening a split
-  splitkeep = 'screen',
+  splitkeep = 'screen', -- Keep cursor to the same screen line when opening a split
 
   -- Searching
   smartcase = true,  -- smart case
   ignorecase = true, -- ignore case in search patterns
   incsearch = true,
   -- hlsearch = false,  -- highlight all matches on previous search pattern
+  inccommand = "nosplit", -- show the effects of a command incrementally, as you type
 
   -- Make terminal support truecolor
   termguicolors = true, -- set term gui colors (most terminals support this)
 
-  -- Make neovim use the system clipboard
-  clipboard = 'unnamedplus', -- allows neovim to access the system clipboard
+  -- only set clipboard if not in ssh, to make sure the OSC 52
+  -- integration works automatically. Requires Neovim >= 0.10.0
+  clipboard = vim.env.SSH_TTY and "" or "unnamedplus", -- Sync with system clipboard
+  -- clipboard = 'unnamedplus', -- allows neovim to access the system clipboard
 
   -- Disable old vim status
   showmode = false, -- we don't need to see things like -- INSERT -- anymore
@@ -36,8 +42,8 @@ local options = {
   -- Tab config
   expandtab = true,   -- convert tabs to spaces
   smartindent = true, -- make indenting smarter again
-  shiftwidth = 4,     -- the number of spaces inserted for each indentation
-  tabstop = 4,        -- insert 2 spaces for a tab
+  shiftwidth = 2,     -- the number of spaces inserted for each indentation
+  tabstop = 2,        -- insert 2 spaces for a tab
   shiftround = true,
 
   -- Code folding
@@ -60,18 +66,22 @@ local options = {
   undofile = true, -- enable persistent undo
   -- undodir = undodir, -- set an undo directory
 
+  -- Maximum number of undo changes
+  undolevels = 10000,
+
   -- Always show tabline
   showtabline = 0, -- 4
 
   -- Mouse support
   mouse = 'a',      -- allow the mouse to be used in neovim
   mousehide = true, -- hide mouse pointer while typing
+  mousescroll = "ver:1,hor:4",
 
   -- Scrolloff
   scrolloff = 8,     -- minimal number of screen lines to keep above and below the cursor.
   sidescrolloff = 8, -- minimal number of screen lines to keep left and right of the cursor.
 
-  -- Disable wrapping
+  -- wrapping
   wrap = true,      -- display lines as one long line
   linebreak = true, -- wrap long lines at a blank
 
@@ -92,6 +102,9 @@ local options = {
   -- Enable lazy redraw for performance
   -- lazyredraw = true,
 
+  -- faster redrawing for modern terminals
+  -- ttyfast = true,
+
   -- Have the statusline only display at the bottom
   laststatus = 3,
 
@@ -102,18 +115,17 @@ local options = {
   conceallevel = 3, --0 -- so that `` is visible in markdown files
 
   -- Hide the command line unless needed
-  cmdheight = 1, -- 0 -- more space in the neovim command line for displaying messages
+  cmdheight = 1,                                              -- 0 -- more space in the neovim command line for displaying messages
 
-  grepprg = 'rg --vimgrep', -- Use ripgrep as the grep program for neovim
+  grepprg = 'rg --vimgrep',                                   -- Use ripgrep as the grep program for neovim
 
-  grepformat = '%f:%l:%c:%m', -- Set the grep format
+  grepformat = '%f:%l:%c:%m',                                 -- Set the grep format
 
-  -- Set completion options
-  -- completeopt = 'menu,menuone,noselect', -- "menuone", -- Set completeopt to have a better completion experience
-  completeopt = { "menuone", "noselect", "preview" },
+  completeopt = { "menu", "menuone", "noselect", "preview" }, -- Set completeopt to have a better completion experience
 
   -- Set key timeout to 1000ms
-  timeoutlen = 1000, -- time to wait for a mapped sequence to complete (in milliseconds)
+  -- timeoutlen = 1000, -- time to wait for a mapped sequence to complete (in milliseconds)
+  timeoutlen = g.vscode and 1000 or 300, -- Lower than default (1000) to quickly trigger which-key
 
   -- Window config
   winwidth = 5,
@@ -134,14 +146,8 @@ local options = {
 
   wildmode = 'longest:full,full', -- Command-line completion mode
 
-  -- Session save options
-  -- sessionoptions = { 'buffers', 'curdir', 'tabpages', 'winsize', 'help', 'globals', 'skiprtp', 'folds' },
-
   -- Enable autowrite
   -- autowrite = true,
-
-  -- Maximum number of undo changes
-  -- undolevels = 10000,
 
   -- Number of items in a completion menu
   pumheight = 10,            -- 20, -- pop up menu height
@@ -158,20 +164,38 @@ local options = {
   autochdir = true,
   -- shell="/usr/bin/zsh",
 
+  spelllang = { "en" },
+
   -- Session save options
   sessionoptions = { 'buffers', 'curdir', 'tabpages', 'winsize', 'help', 'globals', 'skiprtp', 'folds' },
 }
 
-vim.cmd([[
-augroup vimrc-incsearch-highlight
-  autocmd!
-  autocmd CmdlineEnter /,\? :set hlsearch
-  autocmd CmdlineLeave /,\? :set nohlsearch
-augroup END
-]])
+for k, v in pairs(options) do
+  vim.opt[k] = v
+end
+
+-- vim.cmd([[
+-- augroup vimrc-incsearch-highlight
+--   autocmd!
+--   autocmd CmdlineEnter /,\? :set hlsearch
+--   autocmd CmdlineLeave /,\? :set nohlsearch
+-- augroup END
+-- ]])
+
+-- AI completions functionality
+-- g.ai_cmp = false
+
+-- g.lazyvim_check_order = false
 
 -- Disable lsp logging
 vim.lsp.set_log_level('OFF')
+
+-- Set LSP servers to be ignored when used with `util.root.detectors.lsp`
+-- for detecting the LSP root
+-- vim.g.root_lsp_ignore = { "copilot" }
+
+-- Deprecation Warnings
+g.deprecation_warnings = true
 
 -- Disable certain builtins
 g.loaded_netrw = 1
@@ -196,6 +220,13 @@ g.loaded_fzf = 1
 g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_python3_provider = 0
+-- g.loaded_ruby_provider = 0
+
+-- Fix markdown indentation settings
+g.markdown_recommended_style = 0
+
+-- better coop with fzf-lua
+vim.env.FZF_DEFAULT_OPTS = ""
 
 -- shortmess options
 -- opt.shortmess:append({ W = true, I = true, c = true, C = true })
@@ -209,17 +240,20 @@ vim.filetype.add({
     tex = 'tex',
     zir = 'zir',
     cr = 'crystal',
+    config = 'config',
+    conf = 'config',
+    mdx = "markdown.mdx",
   },
   pattern = {
     ['[jt]sconfig.*.json'] = 'jsonc',
+    ['.*/kitty/*.conf'] = 'bash',
+    ['.*/hypr/.*%.conf'] = 'hyprlang',
+    ["compose.*%.ya?ml"] = "yaml.docker-compose",
+    ["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
   },
 })
 
-for k, v in pairs(options) do
-  vim.opt[k] = v
-end
-
-local icons = require('core.icons')
+local icons = require('utils.icons')
 local default_diagnostic_config = {
   signs = {
     active = true,
@@ -245,8 +279,25 @@ local default_diagnostic_config = {
 }
 vim.diagnostic.config(default_diagnostic_config)
 
+
+-- vim.lsp.set_log_level("debug")
+
 -- Enable auto format
 -- vim.g.autoformat = true
+
+-- Se estiver rodando no VSCode, marca a variável global
+if vim.env.VSCODE then
+  g.vscode = true
+end
+
+g.my_active_completion = "blink" -- Set auto-complete mechanism "nvim-cmp" or "blink"
+
+-- if the completion engine supports the AI source,
+-- use that instead of inline suggestions
+g.ai_cmp = true
+
+-- Enable/Disable LazyDev
+g.lazydev_enabled = true
 
 -- Root dir detection
 -- Each entry can be:
@@ -254,3 +305,20 @@ vim.diagnostic.config(default_diagnostic_config)
 -- * a pattern or array of patterns like `.git` or `lua`.
 -- * a function with signature `function(buf) -> string|string[]`
 -- vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }
+
+
+-- Habilita realce de código para arquivos markdown
+-- vim.cmd("let g:markdown_fenced_languages = ['bash', 'html', 'javascript', 'typescript', 'vim', 'lua', 'css']")
+
+-- Configurações específicas para o LSP e Linters do LazyVim (Python)
+-- vim.g.lazyvim_python_lsp = "basedpyright"
+-- vim.g.lazyvim_python_ruff = "ruff"
+
+-- Configuração de Terminal para Windows
+-- if vim.fn.has("win32") == 1 then
+--   LazyVim.terminal.setup("pwsh")
+-- end
+
+-- Define Blinking (Piscar) no Terminal como true se o sistema operacional não for Windows, e false se for Windows.
+-- Sets Blinking to true if the operating system is not Windows, and false if it is Windows.
+-- vim.g.lazyvim_blink_main = not jit.os:find("Windows")

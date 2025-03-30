@@ -1,45 +1,200 @@
-local file_browser = function()
-  local telescope = require('telescope')
+-- local telefuncs = require('utils.telescope_functions')
 
-  local function telescope_buffer_dir()
-    return vim.fn.expand('%:p:h')
-  end
-
-  telescope.extensions.file_browser.file_browser({
-    path = '%:p:h',
-    cwd = telescope_buffer_dir(),
-    respect_gitignore = false,
-    hidden = true,
-    grouped = true,
-    -- previewer = false,
-    initial_mode = 'normal',
-    -- layout_config = { height = 40 },
-    layout_config = { height = 30, width = 150 },
-    sorting_strategy = 'ascending',
-    layout_strategy = 'horizontal',
-    -- layout_strategy = 'bottom_pane',
-  })
-end
-
-local buffers_list = function()
-  require('telescope.builtin').buffers({
-    previewer = false,
-    hidden = true,
-    theme = 'dropdown',
-    layout_strategy = 'horizontal',
-    layout_config = { height = 20, width = 60 },
-  })
-end
-
-local live_grep = function()
-  require('telescope.builtin').live_grep({
-    theme = 'ivy',
-    sorting_strategy = 'ascending',
-    layout_strategy = 'bottom_pane',
-    prompt_prefix = '>> ',
-    prompt_title = "~ search by word ~",
-  })
-end
+---------------------------------------------------------------------
+-- Funçoes redefinidas em utils/telescope_functions.lua
+-- Functions redefined in utils/telescope_functions.lua
+---------------------------------------------------------------------
+-- local file_browser = function()
+--   local telescope = require('telescope')
+--
+--   local function telescope_buffer_dir()
+--     return vim.fn.expand('%:p:h')
+--   end
+--
+--   telescope.extensions.file_browser.file_browser({
+--     path = '%:p:h',
+--     cwd = telescope_buffer_dir(),
+--     respect_gitignore = false,
+--     hidden = true,
+--     grouped = true,
+--     -- previewer = false,
+--     initial_mode = 'normal',
+--     -- layout_config = { height = 40 },
+--     layout_config = { height = 30, width = 150 },
+--     sorting_strategy = 'ascending',
+--     layout_strategy = 'horizontal',
+--     -- layout_strategy = 'bottom_pane',
+--   })
+-- end
+--
+-- local buffers_list = function()
+--   require('telescope.builtin').buffers({
+--     previewer = false,
+--     hidden = true,
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local live_grep = function()
+--   require('telescope.builtin').live_grep({
+--     theme = 'ivy',
+--     sorting_strategy = 'ascending',
+--     layout_strategy = 'bottom_pane',
+--     prompt_prefix = '>> ',
+--     prompt_title = "~ search by word ~",
+--   })
+-- end
+--
+-- local find_files = function()
+--   require("telescope.builtin").find_files({
+--     cwd = require("lazy.core.config").options.root
+--   })
+-- end
+--
+-- local find_in_curr = function()
+--   return require("telescope.builtin").find_files({
+--     no_ignore = false,
+--     hidden = true,
+--   })
+-- end
+--
+-- local list_keymaps = function()
+--   require('telescope.builtin').keymaps({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local list_ts_symbols = function()
+--   require('telescope.builtin').treesitter({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local help_tags = function()
+--   require('telescope.builtin').help_tags({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local recent_files = function()
+--   require('telescope.builtin').oldfiles({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local man_pages = function() return require('telescope.builtin').man_pages() end
+--
+-- local resume_telescope = function()
+--   require('telescope').extensions.resume()
+-- end
+--
+-- local registers = function()
+--   require('telescope.builtin').registers({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local commands = function()
+--   require('telescope.builtin').commands({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local command_history = function()
+--   require('telescope.builtin').command_history({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local document_diagnostics = function()
+--   -- require('telescope.builtin').lsp_document_diagnostics({
+--   require('telescope.builtin').diagnostics({
+--     bufnr = 0,
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local workspace_diagnostics = function()
+--     require('telescope.builtin').diagnostics({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local lsp_document_symbols = function()
+--   require('telescope.builtin').lsp_document_symbols({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- -- local lsp_document_diagnostics = function()
+-- --   require('telescope.builtin').lsp_document_diagnostics({
+-- --     theme = 'dropdown',
+-- --     layout_strategy = 'horizontal',
+-- --     layout_config = { height = 20, width = 60 },
+-- --   })
+-- -- end
+--
+-- -- local lsp_workspace_diagnostics = function()
+-- --   require('telescope.builtin').lsp_workspace_diagnostics({
+-- --     theme = 'dropdown',
+-- --     layout_strategy = 'horizontal',
+-- --     layout_config = { height = 20, width = 60 },
+-- --   })
+-- -- end
+--
+-- local git_status = function()
+--   require('telescope.builtin').git_status({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local git_branches = function()
+--   require('telescope.builtin').git_branches({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local git_commits = function()
+--   require('telescope.builtin').git_commits({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
+--
+-- local git_stash = function()
+--   require('telescope.builtin').git_stash({
+--     theme = 'dropdown',
+--     layout_strategy = 'horizontal',
+--     layout_config = { height = 20, width = 60 },
+--   })
+-- end
 
 return {
   'nvim-telescope/telescope.nvim',
@@ -60,15 +215,16 @@ return {
         manual_mode = false,
       },
       event = "VeryLazy",
+      -- corrigir implementação
       config = function(_, opts)
-        require("project_nvim").setup(opts)
-        require("lazyvim.util").on_load("telescope.nvim", function()
-          require("telescope").load_extension("projects")
-        end)
+        -- require("project_nvim").setup(opts)
+        -- require("lazyvim.util").on_load("telescope.nvim", function()
+        --   require("telescope").load_extension("projects")
+        -- end)
       end,
-      keys = {
-        { "<leader>fp", "<Cmd>Telescope projects<CR>", desc = "Projects" },
-      },
+      -- keys = {
+      --   { ";fp", "<Cmd>Telescope projects<CR>", desc = "Projects" },
+      -- },
     },
     -- {
     --   "nvim-telescope/telescope-project.nvim",
@@ -77,89 +233,46 @@ return {
     --     vim.cmd [[packadd telescope.nvim]]
     --   end,
     -- },
+
   },
   branch = '0.1.x',
   cmd = 'Telescope',
-  keys = {
-    -- stylua: ignore start
-    { '<leader>ff',       function() return require('telescope.builtin').find_files() end,               desc = 'Files' },
-    { '<leader>fw',       function() return require('telescope.builtin').live_grep() end,                desc = 'Words' },
-    { '<leader>fb',       buffers_list,                                                                  desc = 'Buffers' },
-    { '<leader><leader>', buffers_list,                                                                  desc = 'Buffers' },
-    { '<leader>fh',       function() return require('telescope.builtin').help_tags() end,                desc = 'Help' },
-    { '<leader>fm',       function() return require('telescope.builtin').man_pages() end,                desc = 'Man pages' },
-    { '<leader>fr',       function() return require('telescope.builtin').oldfiles() end,                 desc = 'Recently opened' },
-    { '<leader>fR',       function() return require('telescope.builtin').registers() end,                desc = 'Registers' },
-    { '<leader>fk',       function() return require('telescope.builtin').keymaps() end,                  desc = 'Keymaps' },
-    { '<leader>fc',       function() return require('telescope.builtin').commands() end,                 desc = 'Commands' },
-    { '<leader>fC',       function() return require('telescope.builtin').command_history() end,          desc = 'Command history' },
-    { '<leader>fl',       function() return require('telescope.builtin').resume() end,                   desc = 'Resume' },
-    { '<leader>fd',       function() return require('telescope.builtin').diagnostics({ bufnr = 0 }) end, desc = 'Document diagnostics' },
-    { '<leader>fD',       function() return require('telescope.builtin').diagnostics() end,              desc = 'Workspace diagnostics' },
-    { '<leader>fs',       function() return require('telescope.builtin').lsp_document_symbols() end,     desc = 'Document symbols' },
-    { '<leader>ft',       '<cmd>TodoTelescope<CR>',                                                      desc = 'Todo' },
-    { '<leader>fT',       '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<CR>',                              desc = 'Todo/Fix/Fixme' },
-    { '<leader>fu',       '<cmd>Telescope undo<cr>',                                                     desc = 'Undo History' },
-    { ';u',               '<cmd>Telescope undo<cr>',                                                     desc = 'Undo History' },
-    { '<leader>go',       function() return require('telescope.builtin').git_status() end,               desc = 'Search through changed files' },
-    { '<leader>gb',       function() return require('telescope.builtin').git_branches() end,             desc = 'Search through git branches' },
-    { '<leader>gc',       function() return require('telescope.builtin').git_commits() end,              desc = 'Search and checkout git commits' },
-    { '<leader>gO',       function() return require('telescope.builtin').git_stash() end,                desc = 'Search through stash' },
-    {
-      '<leader>fF',
-      function()
-        require("telescope.builtin").find_files({
-          cwd = require("lazy.core.config").options.root
-        })
-      end,
-      desc = "Find Plugin File"
-    },
-    {
-      ';f',
-      function()
-        return require("telescope.builtin").find_files({
-          no_ignore = false,
-          hidden = true,
-        })
-      end,
-      desc = "Lists files in your current working directory, respects .gitignore",
-    },
-    { ';w', live_grep,    desc = "Search String" },
-    { ";b", buffers_list, desc = "Lists open buffers" },
-    {
-      ';h',
-      function()
-        local builtin = require("telescope.builtin")
-        builtin.help_tags()
-      end,
-      desc = "Lists available help tags and opens a new window with the relevant help info on <cr>",
-    },
-    {
-      ';k',
-      function()
-        return require('telescope.builtin').keymaps()
-      end,
-      desc = 'Keymaps'
-    },
-    {
-      ';l',
-      function()
-        return require("telescope.builtin").resume()
-      end,
-      desc = "Resume the previous telescope picker",
-    },
-    { ';D',         function() return require('telescope.builtin').diagnostics() end, desc = 'Workspace diagnostics' },
-    {
-      ";s",
-      function()
-        local builtin = require("telescope.builtin")
-        builtin.treesitter()
-      end,
-      desc = "Lists Function names, variables, from Treesitter",
-    },
-    { ';.',         file_browser,                                                     desc = "File Browser" },
-    { '<leader>fe', file_browser,                                                     desc = "File Browser" },
-  },
+  -- keys = {
+  --   { ';ft',              '<cmd>TodoTelescope<CR>',                                                      desc = 'Todo' },
+  --   { ';fT',              '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<CR>',                              desc = 'Todo/Fix/Fixme' },
+  --   { ';fu',              '<cmd>Telescope undo<cr>',                                                     desc = 'Undo History' },
+  --   { 'gu',               '<cmd>Telescope undo<cr>',                                                     desc = 'Undo History' },
+  --   -- stylua: ignore start
+  --   { ';bl',              telefuncs.buffers_list,                                                                  desc = 'List' },
+  --   { ';<leader>',        telefuncs.buffers_list,                                                                  desc = 'Buffers List' },
+  --   { ';.',               telefuncs.file_browser,                                                                  desc = "File Browser" },
+  --
+  --   { ';ff',              telefuncs.find_files,                                                                    desc = 'Files' },
+  --   { ';fg',              telefuncs.find_in_curr,                                                                  desc = "Find files (respects .gitignore)" },
+  --   { ';k',               telefuncs.list_keymaps,                                                                  desc = 'Keymaps' },
+  --   { ";s",               telefuncs.list_ts_symbols,                                                               desc = "List Treesitter symbols" },
+  --   { ';fs',              telefuncs.lsp_document_symbols(),                                                        desc = 'LSP Document symbols' },
+  --   -- { ';dd',           telefuncs.   lsp_document_diagnostics(),                                                    desc = 'LSP Document diagnostics' },
+  --   -- { ';dw',           telefuncs.   lsp_workspace_diagnostics(),                                                   desc = 'LSP Workspace diagnostics' },
+  --
+  --   { ';h',               telefuncs.help_tags,                                                                     desc = "Search and open help tags" },
+  --   { ';t',               telefuncs.resume_telescope,                                                              desc = 'Resume the previous telescope picker' },
+  --
+  --   { ';fw',              telefuncs.live_grep,                                                                     desc = 'Words' },
+  --   { ';fm',              telefuncs.man_pages,                                                                     desc = 'Man pages' },
+  --   { ';fr',              telefuncs.recent_files,                                                                  desc = 'Recently opened' },
+  --   { ';fR',              telefuncs.registers,                                                                     desc = 'Registers' },
+  --   { ';fc',              telefuncs.commands,                                                                      desc = 'Commands' },
+  --   { ';fC',              telefuncs.command_history,                                                               desc = 'Command history' },
+  --
+  --   { ';fd',              telefuncs.document_diagnostics,                                                          desc = 'Telescope document diagnostics' },
+  --   { ';fD',              telefuncs.workspace_diagnostics,                                                         desc = 'Workspace diagnostics' },
+  --
+  --   { '<leader>go',       telefuncs.git_status,                                                                    desc = 'Search through changed files' },
+  --   { '<leader>gb',       telefuncs.git_branches,                                                                  desc = 'Search through git branches' },
+  --   { '<leader>gc',       telefuncs.git_commits,                                                                   desc = 'Search and checkout git commits' },
+  --   { '<leader>gO',       telefuncs.git_stash,                                                                     desc = 'Search through stash' },
+  -- },
   opts = function()
     -- File and text search in hidden files and directories
     -- local telescope = require('telescope')
@@ -257,7 +370,7 @@ return {
           layout_config = {
             horizontal = {
               -- prompt_position = "top",
-              preview_width = 0.4,
+              preview_width = 0.6,
               results_width = 0.8,
             },
             vertical = {
@@ -273,6 +386,8 @@ return {
       require('telescope').load_extension('fzf'),
       require('telescope').load_extension('file_browser'),
       require("telescope").load_extension('undo'),
+      require("telescope").load_extension("yank_history"),
+      require("telescope").load_extension("fidget")
     }
   end,
 }

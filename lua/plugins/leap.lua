@@ -1,4 +1,4 @@
-return{
+return {
   -- leap.nvim
   {
     'ggandor/leap.nvim',
@@ -6,7 +6,7 @@ return{
     keys = {
       { 's',  mode = { 'n', 'x', 'o' }, desc = 'Leap forward to' },
       { 'S',  mode = { 'n', 'x', 'o' }, desc = 'Leap backward to' },
-      { 'gs', mode = { 'n', 'x', 'o' }, desc = 'Leap from windows' },
+      { 'gW', mode = { 'n', 'x', 'o' }, desc = 'Leap from windows' },
     },
     config = function(_, opts)
       local leap = require('leap')
@@ -39,9 +39,6 @@ return{
   -- makes some plugins dot-repeatable like leap
   { "tpope/vim-repeat", event = "VeryLazy" },
 
-  -- disable flash
-  { "folke/flash.nvim", enabled = false, optional = true },
-
   -- flit.nvim
   {
     'ggandor/flit.nvim',
@@ -54,30 +51,5 @@ return{
       end
       return ret
     end,
-  },
-
-  -- mini.surround
-  {
-    'echasnovski/mini.surround',
-    keys = {
-      { 'gza', mode = { 'n', 'v' },            desc = 'Add surrounding' },
-      { 'gzd', desc = 'Delete surrounding' },
-      { 'gzf', desc = 'Find right surrounding' },
-      { 'gzF', desc = 'Find left surrounding' },
-      { 'gzh', desc = 'Highlight surrounding' },
-      { 'gzr', desc = 'Replace surrounding' },
-      { 'gzn', desc = 'Updated n_lines' },
-    },
-    opts = {
-      mappings = {
-        add = 'gza',
-        delete = 'gzd',
-        find = 'gzf',
-        find_left = 'gzF',
-        highlight = 'gzh',
-        replace = 'gzr',
-        update_n_lines = 'gzn',
-      },
-    },
-  },
+  }
 }
