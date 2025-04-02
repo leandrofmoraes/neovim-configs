@@ -187,7 +187,7 @@ M.providers = {
       get_cwd = function(context)
         return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
       end,
-      show_hidden_files_by_default = false,
+      show_hidden_files_by_default = true,
     },
     transform_items = transform_items('[Path]'),
   },
