@@ -129,6 +129,7 @@ function M.get_config()
       -- }
     },
     contentProvider = { preferred = 'fernflower' },
+    extendedClientCapabilities = require('jdtls').extendedClientCapabilities,
     flags = {
       allow_incremental_sync = true,
       server_side_fuzzy_completion = true,

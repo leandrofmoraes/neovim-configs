@@ -60,7 +60,6 @@ local M = {}
 -- end, 'Next error')
 -- end
 
-
 -- Se o cliente suportar definição, utiliza fzf-lua para definições
 -- if client:supports_method(methods.textDocument_definition) then
 --   keymap('gd', function() require('fzf-lua').lsp_definitions { jump1 = true } end, 'Go to definition')
@@ -150,7 +149,6 @@ local M = {}
 --     })
 --   end
 -- end
-
 
 -- ============================================================================
 -- Configurações de diagnósticos e handlers
@@ -293,7 +291,7 @@ local M = {}
 
 -- Função safe_on_attach: garante que on_attach seja executado apenas uma vez por buffer
 local function safe_on_attach(client, buf, opts)
-  opts = vim.tbl_extend("force", {
+  opts = vim.tbl_extend('force', {
     log_level = vim.log.levels.ERROR,
     notify = true,
     silent = false,
@@ -301,7 +299,7 @@ local function safe_on_attach(client, buf, opts)
 
   -- Verifica se o cliente é válido e se já foi processado
   if not client or vim.b[buf].lsp_attached then
-    return false, "Client invalid or already attached"
+    return false, 'Client invalid or already attached'
   end
   --
   -- if vim.b[buf].lsp_attached then
@@ -313,8 +311,8 @@ local function safe_on_attach(client, buf, opts)
   local ok, err = pcall(function()
     local args = { data = { client_id = client.id }, buf = buf }
     -- local lsp_diagnostics = require("plugins.config.diagnostics")
-    local lsp_keymaps = require("plugins.lsp.lsp_keymaps")
-    local lsp_autocmds = require("plugins.lsp.lsp_autocmds")
+    local lsp_keymaps = require('plugins.lsp.lsp_keymaps')
+    local lsp_autocmds = require('plugins.lsp.lsp_autocmds')
 
     lsp_keymaps.attach(args)
     lsp_autocmds.attach(args)
@@ -324,12 +322,7 @@ local function safe_on_attach(client, buf, opts)
 
   if not ok and opts.notify then
     vim.schedule(function()
-      vim.notify(string.format(
-        "LSP attach error [%s] (buf %d): %s",
-        client.name,
-        buf,
-        err
-      ), opts.log_level)
+      vim.notify(string.format('LSP attach error [%s] (buf %d): %s', client.name, buf, err), opts.log_level)
     end)
   end
 
@@ -373,11 +366,11 @@ function M.configure_server(server, settings)
   -- local capabilities = require("config.lsp_capabilities")
   local default_capabilities = vim.lsp.protocol.make_client_capabilities()
   -- local default_capabilities = require('lspconfig').util.default_config
-  local lsp_handlers = require("plugins.lsp.handlers")
-  local lsp_diagnostics = require("plugins.lsp.diagnostics")
+  local lsp_handlers = require('plugins.lsp.handlers')
+  local lsp_diagnostics = require('plugins.lsp.diagnostics')
 
   default_capabilities.textDocument.completion.completionItem = {
-    documentationFormat = { "markdown", "plaintext" },
+    documentationFormat = { 'markdown', 'plaintext' },
     snippetSupport = true,
     preselectSupport = true,
     insertReplaceSupport = true,
@@ -387,9 +380,9 @@ function M.configure_server(server, settings)
     tagSupport = { valueSet = { 1 } },
     resolveSupport = {
       properties = {
-        "documentation",
-        "detail",
-        "additionalTextEdits",
+        'documentation',
+        'detail',
+        'additionalTextEdits',
       },
     },
   }
@@ -398,27 +391,20 @@ function M.configure_server(server, settings)
   lsp_handlers.setup()
   lsp_diagnostics.setup()
 
-  local active_completion = vim.g.my_active_completion or "blink" -- "blink" | "nvim-cmp"
+  local active_completion = vim.g.my_active_completion or 'blink' -- "blink" | "nvim-cmp"
 
-  if active_completion == "blink" then
-    local ok, blink = pcall(require, "blink") -- ajuste conforme a API do blink
+  if active_completion == 'blink' then
+    local ok, blink = pcall(require, 'blink') -- ajuste conforme a API do blink
 
     if ok and blink.setup_capabilities then
-      default_capabilities = vim.tbl_deep_extend(
-        "force",
-        default_capabilities,
-        blink.get_lsp_capabilities(default_capabilities)
-      )
+      default_capabilities =
+        vim.tbl_deep_extend('force', default_capabilities, blink.get_lsp_capabilities(default_capabilities))
     end
-  elseif active_completion == "nvim-cmp" then
-    local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  elseif active_completion == 'nvim-cmp' then
+    local ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
     if ok then
       -- capabilities = cmp_nvim_lsp.default_capabilities()
-      default_capabilities = vim.tbl_deep_extend(
-        "force",
-        default_capabilities,
-        cmp_nvim_lsp.default_capabilities()
-      )
+      default_capabilities = vim.tbl_deep_extend('force', default_capabilities, cmp_nvim_lsp.default_capabilities())
     end
   end
 
@@ -435,28 +421,25 @@ function M.configure_server(server, settings)
   --   vim.tbl_deep_extend('error', { capabilities = capabilities, silent = true }, settings or {})
   -- )
   -- A special case for jdtls
-  if server == "jdtls" then
+  if server == 'jdtls' then
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'java',
       callback = function()
-        local config = require("plugins.jdtls.java_config").get_config()
-        local extend_or_override = require("plugins.jdtls.java_util").extend_or_override
+        local config = require('plugins.jdtls.java_config').get_config()
+        local extend_or_override = require('plugins.jdtls.java_util').extend_or_override
 
-        -- extend_or_override(config, { on_attach { capabilities = default_capabilities })
-        config.capabilities = vim.tbl_deep_extend("keep", default_capabilities, config.capabilities or {})
+        -- config.capabilities = vim.tbl_deep_extend("keep", default_capabilities, config.capabilities or {})
 
         extend_or_override(config, { on_attach = M.safe_on_attach })
-        require("jdtls").start_or_attach(config)
-      end
+        require('jdtls').start_or_attach(config)
+      end,
     })
   else
-    require('lspconfig')[server].setup(
-      vim.tbl_deep_extend("force", {
-        capabilities = default_capabilities,
-        on_attach = M.safe_on_attach,
-        flags = { debounce_text_changes = 150 },
-      }, settings or {})
-    )
+    require('lspconfig')[server].setup(vim.tbl_deep_extend('force', {
+      capabilities = default_capabilities,
+      on_attach = M.safe_on_attach,
+      flags = { debounce_text_changes = 150 },
+    }, settings or {}))
   end
 end
 
