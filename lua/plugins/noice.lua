@@ -77,20 +77,20 @@ return {
           },
         }
       },
-      markdown = {
-        hover = {
-          ["|(%S-)|"] = vim.cmd.help,                       -- vim help links
-          ["%[.-%]%((%S-)%)"] = require("noice.util").open, -- markdown links
-        },
-        highlights = {
-          ["|%S-|"] = "@text.reference",
-          ["@%S+"] = "@parameter",
-          ["^%s*(Parameters:)"] = "@text.title",
-          ["^%s*(Return:)"] = "@text.title",
-          ["^%s*(See also:)"] = "@text.title",
-          ["{%S-}"] = "@parameter",
-        },
-      },
+      -- markdown = {
+      --   hover = {
+      --     ["|(%S-)|"] = vim.cmd.help,                       -- vim help links
+      --     ["%[.-%]%((%S-)%)"] = require("noice.util").open, -- markdown links
+      --   },
+      --   highlights = {
+      --     ["|%S-|"] = "@text.reference",
+      --     ["@%S+"] = "@parameter",
+      --     ["^%s*(Parameters:)"] = "@text.title",
+      --     ["^%s*(Return:)"] = "@text.title",
+      --     ["^%s*(See also:)"] = "@text.title",
+      --     ["{%S-}"] = "@parameter",
+      --   },
+      -- },
       messages = {
         -- NOTE: If you enable messages, then the cmdline is enabled automatically.
         -- This is a current Neovim limitation.

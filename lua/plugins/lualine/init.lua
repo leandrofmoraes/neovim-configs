@@ -1,7 +1,7 @@
 --> left_sep   :          
 --> right_sep  :          
 
-local utils = require("plugins.lualine.lualine_utils")
+local utils = require('plugins.lualine.lualine_utils')
 local icons = require('utils.icons')
 
 local colors = {
@@ -65,12 +65,12 @@ local my_theme = {
 }
 
 local diff = {
-  "diff",
+  'diff',
   source = utils.diff_source,
   symbols = {
-    added = icons.git.LineAdded .. " ",
-    modified = icons.git.LineModified .. " ",
-    removed = icons.git.LineRemoved .. " ",
+    added = icons.git.LineAdded .. ' ',
+    modified = icons.git.LineModified .. ' ',
+    removed = icons.git.LineRemoved .. ' ',
   },
   padding = { left = 2, right = 1 },
   diff_color = {
@@ -84,22 +84,22 @@ local diff = {
 local lsp = {
   function()
     return utils.getLspClients()
-  end
+  end,
 }
 
 local multicursor = {
   utils.get_name,
   cond = utils.is_active,
-  separator = { left = "" },
+  separator = { left = '' },
 }
 
 local modes = {
-  "mode",
+  'mode',
   -- color = function()
   --     local mode_color = modecolor
   --     return { bg = mode_color[vim.fn.mode()], fg = colors.bg_dark, gui = "bold" }
   -- end,
-  separator = { left = "", right = "" },
+  separator = { left = '', right = '' },
 }
 
 local filetype = {
@@ -136,12 +136,12 @@ local dap = {
 
 local dia = {
   'diagnostics',
-  sources = { 'nvim_lsp', 'nvim_diagnostic' }
+  sources = { 'nvim_lsp', 'nvim_diagnostic' },
 }
 
 local progress = {
   'progress',
-  separator = { right = "" },
+  separator = { right = '' },
 }
 
 return {
