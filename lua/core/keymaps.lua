@@ -75,6 +75,14 @@ end, { expr = true, desc = 'Only yank text with dd from non-empty lines' })
 -- map({ 'n', 'v' }, '<Space>', '<Nop>', { expr = true, silent = true })
 map({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+-- Toggle Arrow keys
+-- map('n', '<Left>', '<Nop>')
+-- map('n', '<Right>', '<Nop>')
+-- map('n', '<Up>', '<Nop>')
+-- map('n', '<Down>', '<Nop>')
+
+map('n', '<leader>tA', '<cmd>ToggleArrows<CR>', { desc = 'Toggle arrrows keys' })
+
 -- Move selected lines up/down in visual mode
 map('x', 'K', ":move '<-2<CR>gv=gv", {})
 map('x', 'J', ":move '>+1<CR>gv=gv", {})

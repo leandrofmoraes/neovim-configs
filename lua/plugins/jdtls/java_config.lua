@@ -19,7 +19,7 @@ end
 local function on_textdocument_codeaction(err, actions, ctx)
   for _, action in ipairs(actions) do
     -- TODO: (steelsojka) Handle more than one edit?
-    if action.command == 'java.apply.workspaceEdit' then -- 'action' is Command in java format
+    if action.command == 'java.apply.workspaceEdit' then                                                 -- 'action' is Command in java format
       action.edit = fix_zero_version(action.edit or action.arguments[1])
     elseif type(action.command) == 'table' and action.command.command == 'java.apply.workspaceEdit' then -- 'action' is CodeAction in java format
       action.edit = fix_zero_version(action.edit or action.command.arguments[1])
@@ -55,8 +55,8 @@ function M.get_config()
 
     filetypes = opts.filetypes or { 'java' },
     -- cmd = opts.full_cmd(opts),
-    -- cmd = Util.build_full_cmd(opts),
-    cmd = opts.cmd,
+    cmd = Util.build_full_cmd(opts),
+    -- cmd = opts.cmd,
     -- root_dir = require('lspconfig.configs.jdtls').default_config.root_dir,
     -- root_dir = require("jdtls.setup").find_root { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" },
     root_dir = opts.root_dir(),

@@ -118,10 +118,10 @@ autocmd("FileType", {
         vim.cmd("close")
         pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
       end, {
-          buffer = event.buf,
-          silent = true,
-          desc = "Quit buffer",
-        })
+        buffer = event.buf,
+        silent = true,
+        desc = "Quit buffer",
+      })
     end)
   end,
 })
@@ -308,3 +308,34 @@ for _, cmd in ipairs(typos) do
     }, {})
   end, { bang = true })
 end
+
+local arrows_disabled = vim.g.arrows_disabled or false
+local function ToggleArrows()
+  local keys = { "<Up>", "<Down>", "<Left>", "<Right>" }
+
+  if not arrows_disabled then
+    -- reativa: deleta os mapeamentos
+    for _, key in ipairs(keys) do
+      pcall(vim.keymap.del, 'n', key)
+    end
+    arrows_disabled = false
+    vim.notify('⇒ The arrow keys are ENABLED', vim.log.levels.INFO, { title = 'Toggle Arrows' })
+  else
+    -- desativa: cria mapeamentos para <nop>
+    for _, key in ipairs(keys) do
+      vim.keymap.set('n', key, '<nop>', { noremap = true, silent = true })
+    end
+    arrows_disabled = true
+    vim.notify('⇒ The arrow keys are DISABLED', vim.log.levels.INFO, { title = 'Toggle Arrows' })
+  end
+end
+
+vim.api.nvim_create_user_command('ToggleArrows', ToggleArrows, {})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  desc = "Configuração inicial das teclas de direção",
+  callback = function()
+    ToggleArrows()
+  end,
+  once = true
+})

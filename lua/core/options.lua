@@ -299,6 +299,10 @@ g.ai_cmp = true
 -- Enable/Disable LazyDev
 g.lazydev_enabled = true
 
+-- Initial state of arrow keys
+g.arrows_disabled = true
+
+
 -- Root dir detection
 -- Each entry can be:
 -- * the name of a detector function like `lsp` or `cwd`
