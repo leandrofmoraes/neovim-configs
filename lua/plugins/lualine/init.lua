@@ -117,7 +117,7 @@ local modes = {
 local filetype = {
   'filetype',
   icon_only = true,
-  separator = '',
+  separator = '',
   padding = { left = 1, right = 0 },
 }
 
@@ -230,8 +230,8 @@ return {
         -- lualine_c = { navic },
         lualine_c = { lsp_status },
         lualine_x = { dap, dia },
-        -- lualine_y = { filetype, 'filename', 'encoding', 'fileformat' },
-        lualine_y = { filetype, 'encoding', 'fileformat' },
+        lualine_y = { filetype, 'filename', 'encoding', 'fileformat' },
+        -- lualine_y = { filetype, 'encoding', 'fileformat' },
         lualine_z = { 'location', progress },
       },
       extensions = {

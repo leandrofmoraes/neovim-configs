@@ -17,10 +17,10 @@ return {
   {
     -- copilot
     "zbirenbaum/copilot.lua",
-    -- requires = {"copilotlsp-nvim/copilot-lsp",},  -- (optional) for NES functionality
+    -- requires = { "copilotlsp-nvim/copilot-lsp", }, -- (optional) for NES functionality
     -- cond = vim.g.ai_cmp == nil and true or vim.g.ai_cmp,
     cmd = "Copilot",
-    build = ":Copilot auth",
+    -- build = ":Copilot auth",
     -- event = "BufReadPost",
     event = "InsertEnter",
     opts = {
