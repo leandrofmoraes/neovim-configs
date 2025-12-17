@@ -46,4 +46,17 @@ return function(hl, c)
   hl.BlinkCmpDocSeparator = { fg = pink }
   hl.BlinkCmpMenuBorder = { fg = pink, bg = transparent }
   hl.BlinkCmpSignatureHelpBorder = { fg = pink, bg = transparent }
+  -- Lualine
+  hl.StatusLine = { bg = transparent, reverse = false, bold = false, underline = false, italic = false }
+  hl.StatusLineTerm = { bg = transparent, reverse = false, bold = false, underline = false, italic = false }
+  hl.StatusLineNC = { bg = transparent, reverse = false }
+  hl.StatusLineTermNC = { bg = transparent, reverse = false }
+  -- Bufferline
+  hl.TabLineFill = { bg = transparent, reverse = false }
+  hl.SagaFolder = { bg = transparent }
+  hl.SagaFolderName = { bg = transparent }
+  hl.SagaSep = { bg = transparent }
+  hl.SagaFileName = { bg = transparent }
+  hl.WinBar = { bg = transparent, reverse = false }
+  hl.WinBarNC = { bg = transparent, reverse = false }
 end

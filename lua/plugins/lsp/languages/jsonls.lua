@@ -6,9 +6,10 @@ M.jsonls = {
   init_options = {
     provideFormatter = true,
   },
-  root_dir = function(fname)
-    return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
-  end,
+  -- root_dir = function(fname)
+  --   return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+  -- end,
+  root_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'),
   single_file_support = true,
   settings = {
     json = {

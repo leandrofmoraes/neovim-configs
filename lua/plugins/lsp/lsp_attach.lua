@@ -398,7 +398,7 @@ function M.configure_server(server, settings)
 
     if ok and blink.setup_capabilities then
       default_capabilities =
-        vim.tbl_deep_extend('force', default_capabilities, blink.get_lsp_capabilities(default_capabilities))
+          vim.tbl_deep_extend('force', default_capabilities, blink.get_lsp_capabilities(default_capabilities))
     end
   elseif active_completion == 'nvim-cmp' then
     local ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
@@ -430,17 +430,27 @@ function M.configure_server(server, settings)
 
         -- config.capabilities = vim.tbl_deep_extend("keep", default_capabilities, config.capabilities or {})
 
-        extend_or_override(config, { on_attach = M.safe_on_attach })
+        extend_or_override(config, { on_attach = safe_on_attach })
         require('jdtls').start_or_attach(config)
       end,
     })
-  else
-    require('lspconfig')[server].setup(vim.tbl_deep_extend('force', {
-      capabilities = default_capabilities,
-      on_attach = M.safe_on_attach,
-      flags = { debounce_text_changes = 150 },
-    }, settings or {}))
+    -- else
+    --   require('lspconfig')[server].setup(vim.tbl_deep_extend('force', {
+    --     capabilities = default_capabilities,
+    --     on_attach = M.safe_on_attach,
+    --     flags = { debounce_text_changes = 150 },
+    --   }, settings or {}))
+    -- end
+    return
   end
+
+  vim.lsp.config(server, vim.tbl_deep_extend('force', {
+    capabilities = default_capabilities,
+    on_attach = safe_on_attach,
+    flags = { debounce_text_changes = 150 },
+  }, settings or {}))
+
+  vim.lsp.enable(server)
 end
 
 return M

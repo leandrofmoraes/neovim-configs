@@ -71,77 +71,59 @@ return {
     -- local lspconfig = require('lspconfig')
     local configure_server = require("plugins.lsp.lsp_attach").configure_server
 
-    -- local servers = {
-    --   ["yamlls"]   = require("plugins.lsp.languages.yamlls").yaml,
-    -- }
-    --
-    -- for server, configs in pairs(servers) do
-    --   configure_server(server, configs)
-    -- end
+    local servers = {
+      --   ["yamlls"]   = require("plugins.lsp.languages.yamlls").yaml,
+      -- }
+      --
+      -- for server, configs in pairs(servers) do
+      --   configure_server(server, configs)
+      -- end
 
-    -- Managing language servers individually
+      -- Managing language servers individually
 
-    -- configure_server( 'marksman', require("plugins.lsp.languages.marksman").markdown)
-    configure_server('marksman', require("plugins.lsp.languages.marksman").markdown)
+      -- configure_server( 'marksman', require("plugins.lsp.languages.marksman").markdown)
+      ['marksman'] = require("plugins.lsp.languages.marksman").markdown,
+      ['lua_ls'] = require("plugins.lsp.languages.lua_ls").lua,
+      ['hyprls'] = require("plugins.lsp.languages.hyprls").hyprls,
+      ['clangd'] = require("plugins.lsp.languages.clangd").clangd,
+      ['cmake'] = require("plugins.lsp.languages.cmake").cmake,
+      ['html'] = require("plugins.lsp.languages.html").html,
+      ['emmet_ls'] = require("plugins.lsp.languages.emmet_ls").emmet,
+      ["vtsls"] = require("plugins.lsp.languages.vtsls").vtsls,
+      ['bashls'] = require("plugins.lsp.languages.bashls").bashls,
+      ['taplo'] = require("plugins.lsp.languages.taplo").taplo,
+      ['sqlls'] = require("plugins.lsp.languages.sqlls").sqlls,
+      ['jsonls'] = require("plugins.lsp.languages.jsonls").jsonls,
+      ['yamlls'] = require("plugins.lsp.languages.yamlls").yamlls,
+      ['lemminx'] = require("plugins.lsp.languages.lemminx").lemminx,
+      ['tailwindcss'] = require("plugins.lsp.languages.tailwindcss").tailwindcss,
+      ['dockerls'] = require("plugins.lsp.languages.dockerls").dockerls,
+      ['docker_compose_language_service'] =
+          require("plugins.lsp.languages.docker_compose_language_service").docker_compose_language_service,
+      ['arduino_language_server'] = require("plugins.lsp.languages.arduino_language_server").arduino,
 
-    configure_server('lua_ls', require("plugins.lsp.languages.lua_ls").lua)
+      -- configure_server( 'angularls', require("plugins.lsp.languages.angularls").angularls) -- Uncomment this line to enable Angular Language Server
+      -- configure_server( 'pyright', require("plugins.lsp.languages.pyright").pyright) -- Uncomment this line to enable Pyright Language Server
 
-    configure_server('hyprls', require("plugins.lsp.languages.hyprls").hyprls)
-
-    configure_server('clangd', require("plugins.lsp.languages.clangd").clangd)
-
-    configure_server('cmake', require("plugins.lsp.languages.cmake").cmake)
-
-    configure_server('html', require("plugins.lsp.languages.html").html)
-
-    configure_server('emmet_ls', require("plugins.lsp.languages.emmet_ls").emmet)
-
-    configure_server("vtsls", require("plugins.lsp.languages.vtsls").vtsls)
-
-    configure_server('bashls', require("plugins.lsp.languages.bashls").bashls)
-
-    configure_server('taplo', require("plugins.lsp.languages.taplo").taplo)
-
-    configure_server('sqlls', require("plugins.lsp.languages.sqlls").sqlls)
-
-    configure_server('jsonls', require("plugins.lsp.languages.jsonls").jsonls)
-
-    configure_server('yamlls', require("plugins.lsp.languages.yamlls").yamlls)
-
-    configure_server('lemminx', require("plugins.lsp.languages.lemminx").lemminx)
-
-    configure_server('tailwindcss', require("plugins.lsp.languages.tailwindcss").tailwindcss)
-
-    configure_server('dockerls', require("plugins.lsp.languages.dockerls").dockerls)
-
-    configure_server(
-      'docker_compose_language_service',
-      require("plugins.lsp.languages.docker_compose_language_service").docker_compose_language_service
-    )
-
-    -- configure_server("arduino-language-server", require("plugins.lsp.languages.arduino_language_server").arduino)
-
-    -- configure_server( 'angularls', require("plugins.lsp.languages.angularls").angularls) -- Uncomment this line to enable Angular Language Server
-    -- configure_server( 'pyright', require("plugins.lsp.languages.pyright").pyright) -- Uncomment this line to enable Pyright Language Server
-
-    configure_server('eslint', {
-      filetypes = {
-        'graphql',
-        'javascript',
-        'javascriptreact',
-        'typescript',
-        'typescriptreact',
+      ['eslint'] = {
+        filetypes = {
+          'graphql',
+          'javascript',
+          'javascriptreact',
+          'typescript',
+          'typescriptreact',
+        },
+        settings = { format = false },
+        on_attach = function(_, bufnr)
+          vim.keymap.set(
+            'n',
+            '<leader>ce',
+            '<cmd>EslintFixAll<cr>',
+            { desc = 'Fix all ESLint errors', buffer = bufnr }
+          )
+        end,
       },
-      settings = { format = false },
-      on_attach = function(_, bufnr)
-        vim.keymap.set(
-          'n',
-          '<leader>ce',
-          '<cmd>EslintFixAll<cr>',
-          { desc = 'Fix all ESLint errors', buffer = bufnr }
-        )
-      end,
-    })
+    }
 
     -- if Util.lsp.get_config("denols") and Util.lsp.get_config("tsserver") then
     --   local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
@@ -175,5 +157,31 @@ return {
     -- lspconfig.html.setup({
     --   capabilities = capabilities,
     -- })
+    -- Estado para evitar reconfigurações repetidas
+    local clients_configured = {}
+
+    vim.lsp.handlers['client/registerCapability'] = (function(overridden)
+      return function(err, res, ctx)
+        local result = overridden(err, res, ctx)
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+
+        if not client or clients_configured[client.id] then
+          return result
+        end
+
+        local server_config = servers[client.name]
+        if server_config then
+          local ok, err_msg = pcall(configure_server, client.name, server_config)
+          if ok then
+            clients_configured[client.id] = true
+          else
+            vim.notify(("Erro ao configurar LSP %s: %s"):format(
+              client.name, tostring(err_msg)), vim.log.levels.ERROR)
+          end
+        end
+
+        return result
+      end
+    end)(vim.lsp.handlers['client/registerCapability'])
   end,
 }

@@ -3,9 +3,27 @@ local M = {}
 M.taplo = {
   cmd = { 'taplo', 'lsp', 'stdio' },
   filetypes = { 'toml' },
+
   root_dir = function(fname)
-    return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+    -- converte bufnr (number) para nome do arquivo (string)
+    if type(fname) == "number" then
+      fname = vim.api.nvim_buf_get_name(fname)
+    end
+
+    -- se não houver nome (buffer novo/sem arquivo), usa cwd como fallback
+    if not fname or fname == "" then
+      fname = vim.loop.cwd()
+    end
+
+    local found = vim.fs.find({ ".git" }, { path = fname, upward = true })
+    if found and #found > 0 then
+      return vim.fs.dirname(found[1])
+    end
+
+    -- fallback: retorna o diretório do arquivo (ou cwd se for vazio)
+    return vim.fs.dirname(fname)
   end,
+
   single_file_support = true,
 
   settings = {

@@ -3,9 +3,10 @@ local M = {}
 M.lemminx = {
   cmd = { 'lemminx' },
   filetypes = { 'xml', 'xsd', 'xsl', 'xslt', 'svg' },
-  root_dir = function(fname)
-    return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
-  end,
+  root_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'),
+  -- root_dir = function(fname)
+  --   return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+  -- end,
   single_file_support = true,
   docs = {
     description = [[

@@ -31,6 +31,7 @@
 
 ### Dependencies.
 
+- Nvim >= 0.11
 - git > To install the config and plugins
 - [Nerd Fonts](https://www.nerdfonts.com/) > Used to display icons
 - npm > Used to install certain mason packages

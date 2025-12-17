@@ -30,6 +30,22 @@ local colors = {
 --             removed = { fg = colors.red },
 --         },
 --     }
+--- @param trunc_width number trunctates component when screen width is less then trunc_width
+--- @param trunc_len number truncates component to trunc_len number of chars
+--- @param hide_width number hides component when window width is smaller then hide_width
+--- @param no_ellipsis boolean whether to disable adding '...' at end after truncation
+--- return function that can format the component accordingly
+local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
+  return function(str)
+    local win_width = vim.fn.winwidth(0)
+    if hide_width and win_width < hide_width then
+      return ''
+    elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+      return str:sub(1, trunc_len) .. (no_ellipsis and '' or '...')
+    end
+    return str
+  end
+end
 
 local my_theme = {
   normal = {
@@ -72,19 +88,13 @@ local diff = {
     modified = icons.git.LineModified .. ' ',
     removed = icons.git.LineRemoved .. ' ',
   },
-  padding = { left = 2, right = 1 },
+  padding = { left = 1, right = 1 },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.yellow },
     removed = { fg = colors.red },
   },
   cond = nil,
-}
-
-local lsp = {
-  function()
-    return utils.getLspClients()
-  end,
 }
 
 local multicursor = {
@@ -95,18 +105,20 @@ local multicursor = {
 
 local modes = {
   'mode',
+  icons_enabled = true,
   -- color = function()
   --     local mode_color = modecolor
   --     return { bg = mode_color[vim.fn.mode()], fg = colors.bg_dark, gui = "bold" }
   -- end,
   separator = { left = '', right = '' },
+  -- fmt=trunc(80, 4, nil, true)
 }
 
 local filetype = {
   'filetype',
   icon_only = true,
-  separator = '',
-  padding = { left = 1, right = 1 },
+  separator = '',
+  padding = { left = 1, right = 0 },
 }
 
 -- local navic = {
@@ -144,14 +156,33 @@ local progress = {
   separator = { right = '' },
 }
 
+local filename = {
+  'filename',
+  fmt = trunc(90, 30, 50, false)
+}
+
+local lsp_status = {
+  'lsp_status',
+  icon = '', -- f013
+  symbols = {
+    spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+    done = '✓',
+    separator = ' | ',
+    -- separator = { left = '[', right = ']' },
+  },
+  -- List of LSP names to ignore (e.g., `null-ls`):
+  ignore_lsp = {},
+  show_name = true,
+}
+
 return {
   {
     'linrongbin16/lsp-progress.nvim',
     -- commit = '70dfe3b',
     -- dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('lsp-progress').setup()
-    end,
+    -- config = function()
+    --   require('lsp-progress').setup()
+    -- end,
   },
   {
     'nvim-lualine/lualine.nvim',
@@ -159,6 +190,7 @@ return {
     event = { 'BufReadPost', 'BufNewFile' },
     opts = {
       options = {
+        icons_enabled = true,
         theme = my_theme,
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
@@ -169,14 +201,37 @@ return {
           'NeogitPopup',
           'NeogitConsole',
         },
+        ignore_focus = {},
+        always_divide_middle = true,
+        always_show_tabline = true,
+        globalstatus = false,
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
+          refresh_time = 16, -- ~60fps
+          events = {
+            'WinEnter',
+            'BufEnter',
+            'BufWritePost',
+            'SessionLoadPost',
+            'FileChangedShellPost',
+            'VimResized',
+            'Filetype',
+            'CursorMoved',
+            'CursorMovedI',
+            'ModeChanged',
+          },
+        }
       },
       sections = {
-        lualine_a = { multicursor, modes },
+        lualine_a = { modes },
         lualine_b = { 'branch', diff, betterEscape },
         -- lualine_c = { navic },
-        lualine_c = { lsp },
+        lualine_c = { lsp_status },
         lualine_x = { dap, dia },
-        lualine_y = { filetype, 'filename', 'fileformat' },
+        -- lualine_y = { filetype, 'filename', 'encoding', 'fileformat' },
+        lualine_y = { filetype, 'encoding', 'fileformat' },
         lualine_z = { 'location', progress },
       },
       extensions = {

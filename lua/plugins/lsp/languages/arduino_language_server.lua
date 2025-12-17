@@ -3,22 +3,28 @@ local util = require('plugins.lsp.lsp_util')
 
 M.arduino = {
   filetypes = { 'arduino' },
-  root_dir = util.root_pattern('*.ino'),
   cmd = {
     vim.fn.expand("~/.local/share/nvim/mason/bin/arduino-language-server"),
-    "-clangd", "clangd",
-    "-cli", "/usr/local/bin/arduino-cli",
+    "-clangd", vim.fn.expand("~/.local/share/nvim/mason/bin/clangd"),
+    "-cli", "/usr/bin/arduino-cli",
     "-cli-config", vim.fn.expand("~/.arduino15/arduino-cli.yaml"),
-    "-fqbn", "arduini:avr:uno",
+    "-fqbn", "arduino:avr:uno",
+    "-fqbn", "esp8266:esp8266:nodemcuv2",
   },
-  -- capabilities = {
-  --   textDocument = {
-  --     semanticTokens = vim.NIL,
-  --   },
-  --   workspace = {
-  --     semanticTokens = vim.NIL,
-  --   },
-  -- },
+  capabilities = {
+    textDocument = {
+      semanticTokens = vim.NIL,
+    },
+    workspace = {
+      semanticTokens = vim.NIL,
+    },
+  },
+  -- root_dir = vim.fn.expand "%:p:h",
+  -- root_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'),
+  root_dir = function(bufnr, on_dir)
+    local fname = vim.api.nvim_buf_get_name(bufnr)
+    on_dir(util.root_pattern('*.ino')(fname))
+  end,
   docs = {
     description = [[
 https://github.com/arduino/arduino-language-server

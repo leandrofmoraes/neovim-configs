@@ -84,6 +84,7 @@ M.clangd = {
       "meson_options.txt",
       "build.ninja"
     )(fname) or vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+    -- root_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'),
   end,
   single_file_support = true,
   capabilities = {

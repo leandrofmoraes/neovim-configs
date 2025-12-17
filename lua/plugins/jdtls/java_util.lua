@@ -1,7 +1,6 @@
 local M = {}
 
-local home_dir = os.getenv("HOME")
--- local home_dir = vim.env.HOME
+local home_dir = os.getenv("HOME") or vim.env.HOME
 
 ----------------------------------------------------------------
 
@@ -56,19 +55,59 @@ end
 -- Cache para caminhos do Mason
 local _mason_package_paths = {}
 
---- Get installed Mason package path
+--- Get installed Mason package path (compatible com mason v1.x e v2.x)
 --- @param package_name string
 --- @return string|nil
 function M.get_mason_package_path(package_name)
-  local mason_registry = require("mason-registry")
+  if _mason_package_paths[package_name] then
+    return _mason_package_paths[package_name]
+  end
 
-  if not _mason_package_paths[package_name] then
-    local ok, pkg = pcall(mason_registry.get_package, package_name)
-    if ok and pkg:is_installed() then
-      _mason_package_paths[package_name] = pkg:get_install_path()
+  -- Tenta usar a registry do mason de forma segura
+  local ok, registry = pcall(require, "mason-registry")
+  if ok and registry then
+    local success, pkg = pcall(registry.get_package, package_name)
+    if success and pkg then
+      -- API antiga (mason < 2.0) tinha get_install_path()
+      if type(pkg.get_install_path) == "function" then
+        local s, path = pcall(function() return pkg:get_install_path() end)
+        if s and path and path ~= "" then
+          _mason_package_paths[package_name] = path
+          return path
+        end
+      end
+      -- caso não exista get_install_path, vamos cair nos fallbacks abaixo
     end
   end
-  return _mason_package_paths[package_name]
+
+  -- Fallbacks: $MASON ou stdpath('data') .. '/mason'
+  local mason_root = vim.fn.expand("$MASON")
+  if mason_root == "" then
+    mason_root = vim.fn.stdpath("data") .. "/mason"
+  end
+
+  -- Primeiro tenta layout 'packages/<pkg>'
+  local packages_path = mason_root .. "/packages/" .. package_name
+  if vim.fn.isdirectory(packages_path) == 1 then
+    _mason_package_paths[package_name] = packages_path
+    return packages_path
+  end
+
+  -- Depois tenta 'share/<pkg>' (comum em mason v2)
+  local share_path = mason_root .. "/share/" .. package_name
+  if vim.fn.isdirectory(share_path) == 1 then
+    _mason_package_paths[package_name] = share_path
+    return share_path
+  end
+
+  -- Por fim, tenta caminhos históricos usados por algumas configs
+  local legacy_path = vim.fn.expand("~/.local/share/nvim/mason/packages/" .. package_name)
+  if vim.fn.isdirectory(legacy_path) == 1 then
+    _mason_package_paths[package_name] = legacy_path
+    return legacy_path
+  end
+
+  return nil
 end
 
 ----------------------------------------------------------------
@@ -79,9 +118,21 @@ local function get_java_debug_bundles()
   local debug_path = M.get_mason_package_path("java-debug-adapter")
   if not debug_path then return {} end
 
-  -- local debug_jars = vim.split(vim.fn.glob(debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar", 1), "\n")
-  local debug_jars = vim.split(vim.fn.glob(debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar"), "\n")
-  -- local debug_jars = vim.split(vim.fn.glob(debug_path .. "/extension/server/*.jar"), "\n")
+  -- Tenta localizar os jars dentro do pacote (plugins/extensions)
+  local pattern1 = debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar"
+  local pattern2 = debug_path .. "/**/*.jar"
+
+  local debug_jars = {}
+  local glob1 = vim.fn.glob(pattern1)
+  if glob1 and glob1 ~= "" then
+    debug_jars = vim.split(glob1, "\n")
+  else
+    local glob2 = vim.fn.glob(pattern2)
+    if glob2 and glob2 ~= "" then
+      debug_jars = vim.split(glob2, "\n")
+    end
+  end
+
   return vim.tbl_filter(function(jar)
     return vim.fn.filereadable(jar) == 1
   end, debug_jars)
@@ -93,40 +144,41 @@ local function get_java_test_bundles()
   local test_path = M.get_mason_package_path("java-test")
   if not test_path then return {} end
 
-  local test_jars = vim.split(vim.fn.glob(test_path .. "/extension/server/*.jar"), "\n")
+  local test_jars = {}
+  local glob1 = vim.fn.glob(test_path .. "/extension/server/*.jar")
+  if glob1 and glob1 ~= "" then
+    test_jars = vim.split(glob1, "\n")
+  end
 
-  local vscode_java_test = vim.split(
-    vim.fn.glob(home_dir .. ".vscode/extensions/vscjava.vscode-java-test-*/server/*.jar"), "\n")
-  if #vscode_java_test > 0 then
-    vim.list_extend(test_jars, vscode_java_test)
+  -- Também tenta pegar jars do vscode-java-test (caso o usuário tenha instalado no VSCode)
+  local vscode_java_test = vim.fn.glob(home_dir .. "/.vscode/extensions/vscjava.vscode-java-test-*/server/*.jar")
+  if vscode_java_test and vscode_java_test ~= "" then
+    vim.list_extend(test_jars, vim.split(vscode_java_test, "\n"))
   end
 
   return vim.tbl_filter(function(jar)
     return vim.fn.filereadable(jar) == 1
   end, test_jars)
 end
+
 ----------------------------------------------------------------
 
 --- Get all required bundles for JDTLS
 --- @param opts table
 --- @return table
 function M.get_bundles(opts)
-  -- Find the extra bundles that should be passed on the jdtls command-line
   local bundles = {} ---@type string[]
 
-  -- Add Spring Boot extensions if available
-  -- vim.list_extend(bundles, require("spring_boot").java_extensions())
+  -- Spring Boot extensions (se existir)
   local ok, spring_boot = pcall(require, "spring_boot")
   if ok and type(spring_boot.java_extensions) == "function" then
     vim.list_extend(bundles, spring_boot.java_extensions())
   end
 
-  -- Add debug/test bundles if DAP is enabled
+  -- Se DAP habilitado, adiciona debug/test bundles
   if opts.dap and M.has_plugin("nvim-dap") then
     vim.list_extend(bundles, get_java_debug_bundles())
 
-    -- java-test also depends on java-debug-adapter.
-    -- if opts.test and mason_registry.is_installed("java-test") then
     if opts.test and M.get_mason_package_path("java-test") then
       vim.list_extend(bundles, get_java_test_bundles())
     end
@@ -140,19 +192,19 @@ end
 --- Get Lombok agent path with fallback
 --- @return string
 local function get_lombok_agent()
-  -- Try Mason first
+  -- Tenta via Mason
   local jdtls_path = M.get_mason_package_path("jdtls")
   if jdtls_path then
     local lombok_jar = jdtls_path .. "/lombok.jar"
     if vim.fn.filereadable(lombok_jar) == 1 then
       return lombok_jar
     else
-      vim.notify("Lombok not found in Mason package", vim.log.levels.ERROR)
+      vim.notify("Lombok not found in Mason package", vim.log.levels.WARN)
     end
   end
 
-  -- Fallback to Maven
-  if not home_dir then
+  -- Fallback para Maven local (~/.m2)
+  if not home_dir or home_dir == "" then
     vim.notify("Variável de ambiente HOME não está definida", vim.log.levels.ERROR)
     return ""
   end
@@ -162,7 +214,6 @@ local function get_lombok_agent()
     return lombok_latest
   end
 
-  -- Error handling
   vim.notify("Lombok not found! Install via Mason (jdtls) or Maven", vim.log.levels.ERROR)
   return ""
 end
@@ -179,37 +230,42 @@ function M.build_full_cmd(opts)
     return {}
   end
 
-  -- local root_dir = opts.root_dir
   local root_dir = opts.root_dir()
   local project_name = opts.project_name(root_dir)
-  -- local project_name = M.get_project_name(root_dir)
-
   local cmd = vim.deepcopy(opts.cmd)
   local lombok_agent = get_lombok_agent()
 
-  local equinox_launcher = vim.fn.glob(home_dir ..
+  -- Tenta localizar equinox launcher dentro do pacote jdtls obtido via Mason
+  local jdtls_pkg_path = M.get_mason_package_path("jdtls")
+  local equinox_glob = nil
+  if jdtls_pkg_path then
+    equinox_glob = vim.fn.glob(jdtls_pkg_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+  else
+    equinox_glob = vim.fn.glob(home_dir ..
     "/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar")
-  if equinox_launcher == "" then
+  end
+
+  if equinox_glob == "" then
     error("Eclipse Equinox Launcher JAR não encontrado! Verifique a instalação do jdtls.")
   end
 
+  local equinox_launcher = equinox_glob
+
   if project_name then
     vim.list_extend(cmd, {
-      "java", -- or '/path/to/java11_or_newer/bin/java'
-      -- "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044",
+      "java",
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
       "-Dosgi.bundles.defaultStartLevel=4",
       "-Declipse.product=org.eclipse.jdt.ls.core.product",
-      -- "-Djava.awt.headless=true",  -- Remove dependências GUI
       "-Dlog.protocol=true",
-      "-Dlog.level=ALL", -- "INFO", "WARN", "ERROR" or "ALL"
+      "-Dlog.level=ALL",
       "-Xms1g",
       "--add-modules=ALL-SYSTEM",
       "--add-opens",
       "java.base/java.util=ALL-UNNAMED",
       "--add-opens",
       "java.base/java.lang=ALL-UNNAMED",
-      "--jvm-arg=-javaagent:" .. lombok_agent,
+      "--jvm-arg=-javaagent:" .. (lombok_agent or ""),
       "-jar", equinox_launcher,
       "-configuration", opts.jdtls_config_dir(project_name),
       "-data", opts.jdtls_workspace_dir(project_name),
@@ -231,14 +287,11 @@ function M.enable_debugger(opts)
   local debug_adapter_installed = M.get_mason_package_path("java-debug-adapter")
   local test_adapter_installed = M.get_mason_package_path("java-test")
 
-  -- Configuração do DAP: Se o adaptador de debug estiver instalado, configura o DAP.
-
   -- Crie um augroup para evitar múltiplas instâncias do autocmd
   local jdtls_dap_grp = vim.api.nvim_create_augroup("JdtlsDapSetup", { clear = true })
 
   vim.api.nvim_create_autocmd("User", {
     group = jdtls_dap_grp,
-    -- pattern = "*.java",
     pattern = "jdtls_project_loaded",
     once = true,
     callback = function()
@@ -248,12 +301,9 @@ function M.enable_debugger(opts)
           jdtls.setup_dap(opts.dap or {})
 
           if test_adapter_installed then
-            -- Requerir o módulo jdtls.dap separadamente para configurar os testes
             local ok_dap, jdtls_dap = pcall(require, "jdtls.dap")
             if ok_dap then
-              -- vim.defer_fn(function()
               jdtls_dap.setup_dap_main_class_configs()
-              -- end, 3000) -- 3000ms de delay
             else
               vim.notify("Error! module 'jdtls.dap' is required", vim.log.levels.ERROR)
             end

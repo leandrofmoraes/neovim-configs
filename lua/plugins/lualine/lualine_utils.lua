@@ -55,10 +55,20 @@ end
 function M.getLspClients()
   return require('lsp-progress').progress({
     -- format = function(messages)
+    client_format = function(client_name, spinner, series_messages)
+      if #series_messages == 0 then
+        return nil
+      end
+      return {
+        name = client_name,
+        body = spinner .. " " .. table.concat(series_messages, ", "),
+      }
+    end,
     format = function()
       -- local active_clients = vim.lsp.get_active_clients()
       -- local active_clients = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })  --deprecated in v0.10.0
       local active_clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+
       -- if #messages > 0 then
       --   -- return ' LSP:' .. table.concat(messages, ' ')
       --   return table.concat(messages, ' ')

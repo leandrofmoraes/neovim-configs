@@ -4,9 +4,10 @@ M.yamlls = {
   -- Have to add this for yamlls to understand that we support line folding
   cmd = { 'yaml-language-server', '--stdio' },
   filetypes = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab' },
-  root_dir = function(fname)
-    return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
-  end,
+  -- root_dir = function(fname)
+  --   return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+  -- end,
+  root_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'),
   single_file_support = true,
   capabilities = {
     textDocument = {
