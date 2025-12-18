@@ -71,21 +71,16 @@ return {
     -- local lspconfig = require('lspconfig')
     local configure_server = require("plugins.lsp.lsp_attach").configure_server
 
+    -- load custom server configurations
+    configure_server('arduino_language_server', require("plugins.lsp.languages.arduino_language_server").arduino)
+    -- configure_server( 'marksman', require("plugins.lsp.languages.marksman").markdown)
+
     local servers = {
       --   ["yamlls"]   = require("plugins.lsp.languages.yamlls").yaml,
-      -- }
-      --
-      -- for server, configs in pairs(servers) do
-      --   configure_server(server, configs)
-      -- end
-
-      -- Managing language servers individually
-
-      -- configure_server( 'marksman', require("plugins.lsp.languages.marksman").markdown)
       ['marksman'] = require("plugins.lsp.languages.marksman").markdown,
       ['lua_ls'] = require("plugins.lsp.languages.lua_ls").lua,
       ['hyprls'] = require("plugins.lsp.languages.hyprls").hyprls,
-      ['clangd'] = require("plugins.lsp.languages.clangd").clangd,
+      -- ['clangd'] = require("plugins.lsp.languages.clangd").clangd,
       ['cmake'] = require("plugins.lsp.languages.cmake").cmake,
       ['html'] = require("plugins.lsp.languages.html").html,
       ['emmet_ls'] = require("plugins.lsp.languages.emmet_ls").emmet,
@@ -100,11 +95,7 @@ return {
       ['dockerls'] = require("plugins.lsp.languages.dockerls").dockerls,
       ['docker_compose_language_service'] =
           require("plugins.lsp.languages.docker_compose_language_service").docker_compose_language_service,
-      ['arduino_language_server'] = require("plugins.lsp.languages.arduino_language_server").arduino,
-
       -- configure_server( 'angularls', require("plugins.lsp.languages.angularls").angularls) -- Uncomment this line to enable Angular Language Server
-      -- configure_server( 'pyright', require("plugins.lsp.languages.pyright").pyright) -- Uncomment this line to enable Pyright Language Server
-
       ['eslint'] = {
         filetypes = {
           'graphql',
@@ -125,39 +116,8 @@ return {
       },
     }
 
-    -- if Util.lsp.get_config("denols") and Util.lsp.get_config("tsserver") then
-    --   local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
-    --   Util.lsp.disable("tsserver", is_deno)
-    --   Util.lsp.disable("denols", function(root_dir)
-    --     return not is_deno(root_dir)
-    --   end)
-    -- end
-
-    -- rust_analyzer
-    -- lspconfig.rust_analyzer.setup({
-    --   capabilities = capabilities,
-    --   -- Server-specific settings. See `:help lspconfig-setup`
-    --   settings = {
-    --     ['rust-analyzer'] = {},
-    --   },
-    -- })
-
-    -- tsserver
-    -- lspconfig.tsserver.setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    --   -- settings = {
-    --   --   completions = {
-    --   --     completeFunctionCalls = true
-    --   --   }
-    --   -- }
-    -- })
-
-    -- -- html
-    -- lspconfig.html.setup({
-    --   capabilities = capabilities,
-    -- })
     -- Estado para evitar reconfigurações repetidas
+
     local clients_configured = {}
 
     vim.lsp.handlers['client/registerCapability'] = (function(overridden)

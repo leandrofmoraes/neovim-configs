@@ -1,16 +1,29 @@
 local M = {}
 local util = require('plugins.lsp.lsp_util')
 
+local function arduino_fqbn()
+  if vim.fn.glob("*.ino") ~= "" then
+    if vim.fn.filereadable("esp8266.yaml") == 1 then
+      return "esp8266:esp8266:nodemcuv2"
+    end
+  end
+  return "arduino:avr:uno"
+end
+
+local arduino_cmd = function()
+  return {
+    "arduino-language-server",
+    "-clangd", vim.fn.exepath("clangd"),
+    "-cli", vim.fn.exepath("arduino-cli"),
+    "-cli-config", vim.fn.expand("~/.arduino15/arduino-cli.yaml"),
+    -- "-fqbn", "arduino:avr:uno",
+    "-fqbn", arduino_fqbn(),
+  }
+end
+
 M.arduino = {
   filetypes = { 'arduino' },
-  cmd = {
-    vim.fn.expand("~/.local/share/nvim/mason/bin/arduino-language-server"),
-    "-clangd", vim.fn.expand("~/.local/share/nvim/mason/bin/clangd"),
-    "-cli", "/usr/bin/arduino-cli",
-    "-cli-config", vim.fn.expand("~/.arduino15/arduino-cli.yaml"),
-    "-fqbn", "arduino:avr:uno",
-    "-fqbn", "esp8266:esp8266:nodemcuv2",
-  },
+  cmd = arduino_cmd(),
   capabilities = {
     textDocument = {
       semanticTokens = vim.NIL,
@@ -21,9 +34,16 @@ M.arduino = {
   },
   -- root_dir = vim.fn.expand "%:p:h",
   -- root_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h'),
+  -- root_dir = function(bufnr, on_dir)
+  --   on_dir(vim.fn.expand "%:p:h")
+  -- end,
+  -- root_dir = util.root_pattern '*.ino',
+  -- root_dir = function(bufnr, on_dir)
+  --   local fname = vim.api.nvim_buf_get_name(bufnr)
+  --   on_dir(util.root_pattern('*.ino')(fname))
+  -- end,
   root_dir = function(bufnr, on_dir)
-    local fname = vim.api.nvim_buf_get_name(bufnr)
-    on_dir(util.root_pattern('*.ino')(fname))
+    on_dir(vim.fn.expand "%:p:h")
   end,
   docs = {
     description = [[

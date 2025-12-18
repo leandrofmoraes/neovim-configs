@@ -5,10 +5,10 @@ local config = require("plugins.blink.blink_config")
 return {
   {
     'saghen/blink.cmp',
-    version = '0.*',
+    --version = '0.*',
     cond = vim.g.my_active_completion == "blink", --Condição de carregamento
     dependencies = {
-      "LuaSnip",
+      -- "LuaSnip",
       "moyiz/blink-emoji.nvim",
       "MahanRahmati/blink-nerdfont.nvim",
       "dmitmel/cmp-digraphs", --source in compatbility mode with nvim-cmp
