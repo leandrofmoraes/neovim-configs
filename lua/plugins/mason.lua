@@ -109,6 +109,13 @@ return {
       --   settings.current.automatic_installation = false
       -- end,
       automatic_installation = true,
+      -- automatic_enable = false
+      automatic_enable = {
+        exclude = {
+          "arduino_language_server",
+          "jdtls",
+        },
+      },
 
     }
   },

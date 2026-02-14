@@ -161,6 +161,11 @@ local filename = {
   fmt = trunc(90, 30, 50, false)
 }
 
+local fileformat = {
+  'fileformat',
+  separator = { right = '' },
+}
+
 local lsp_status = {
   'lsp_status',
   icon = '', -- f013
@@ -230,7 +235,7 @@ return {
         -- lualine_c = { navic },
         lualine_c = { lsp_status },
         lualine_x = { dap, dia },
-        lualine_y = { filetype, 'filename', 'encoding', 'fileformat' },
+        lualine_y = { filetype, 'filename', 'encoding' },
         -- lualine_y = { filetype, 'encoding', 'fileformat' },
         lualine_z = { 'location', progress },
       },

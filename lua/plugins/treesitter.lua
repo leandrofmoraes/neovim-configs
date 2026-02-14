@@ -13,7 +13,7 @@ end
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false,  -- usa sempre o commit mais recente
+    -- version = false,  -- usa sempre o commit mais recente
     build = ":TSUpdate",
     -- event = { 'BufReadPost', 'BufNewFile' },
     event = { "BufReadPost", "VeryLazy" },
@@ -26,7 +26,6 @@ return {
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
     opts = function(_, opts)
-
       opts.ensure_installed = vim.tbl_deep_extend("force", opts.ensure_installed or {}, {
         "lua", "luadoc", "luap", "c", "cpp", "java", "markdown", "markdown_inline",
         "git_config", "git_rebase", "gitcommit", "gitignore", "diff", "vimdoc",
@@ -65,8 +64,8 @@ return {
       opts.auto_install = true
       -- opts.matchup = { enable = true, include_match_words = true, enable_quotes = true }
       opts.matchup = {
-        enable = true,              -- mandatory, false will disable the whole extension
-        disable = { "c", "ruby" },  -- optional, list of language that will be disabled
+        enable = true,             -- mandatory, false will disable the whole extension
+        disable = { "c", "ruby" }, -- optional, list of language that will be disabled
         -- [options]
       }
 
