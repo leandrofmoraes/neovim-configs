@@ -26,13 +26,17 @@ return {
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
     opts = function(_, opts)
+      -- opts.ensure_installed = vim.tbl_deep_extend("force", opts.ensure_installed or {}, {
+      --   "lua", "luadoc", "luap", "c", "cpp", "java", "markdown", "markdown_inline",
+      --   "git_config", "git_rebase", "gitcommit", "gitignore", "diff", "vimdoc",
+      --   "bash", "toml", "ssh_config", "dockerfile",
+      --   "html", "javascript", "jsdoc", "json", "jsonc", "printf", "python",
+      --   "query", "regex", "tsx", "typescript", "vim", "xml", "yaml",
+      --   "make", "cmake", "css", "http", "scss", "sql",
+      -- })
+
       opts.ensure_installed = vim.tbl_deep_extend("force", opts.ensure_installed or {}, {
-        "lua", "luadoc", "luap", "c", "cpp", "java", "markdown", "markdown_inline",
-        "git_config", "git_rebase", "gitcommit", "gitignore", "diff", "vimdoc",
-        "bash", "toml", "ssh_config", "dockerfile",
-        "html", "javascript", "jsdoc", "json", "jsonc", "printf", "python",
-        "query", "regex", "tsx", "typescript", "vim", "xml", "yaml",
-        "make", "cmake", "css", "http", "scss", "sql",
+        "lua", "luadoc", "luap", "vimdoc", "bash", "ssh_config", "jsdoc",
       })
 
       -- Configuração de highlight
@@ -47,6 +51,7 @@ return {
         enable = true,
         enable_autocmd = false,
         config = {
+          lua = "-- %s",
           typescript = "// %s",
           css = "/* %s */",
           scss = "/* %s */",

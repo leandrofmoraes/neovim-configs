@@ -43,21 +43,6 @@ local Snacks = require('snacks')
 -- end
 
 ------------------------------------------------------
---for no groups
-------------------------------------------------------
--- wk.add({
--- mode = { 'n', 'v' },
--- { "<leader>;", "<cmd>Alpha<CR>", desc = "Dashboard" },
--- { "<leader>w", "<cmd>w!<CR>", desc = "Save" },
--- { "<leader>/", require("Comment.api").toggle.linewise.current, desc = "Comment current line" },
--- ["<leader>l"] = {
---   name = "lsp",
---   i = { "<cmd>LspInfo<cr>", "Info" },
---   I = { "<cmd>Mason<cr>", "Mason Info" },
--- },
--- })
-
-------------------------------------------------------
 ---- Mappings with "vim.keymap.set"
 ------------------------------------------------------
 -- Smart delete
@@ -419,10 +404,14 @@ map('n', 'gre', ':%s/<C-r><C-w>/<C-r><C-w>/gcI<Left><Left><Left><Left>', { desc 
 ------------------------------------------------------
 
 local diagnostic_goto = function(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+  local count = next and 1 or -1
   severity = severity and vim.diagnostic.severity[severity] or nil
   return function()
-    go({ severity = severity })
+    vim.diagnostic.jump({
+      count = count,
+      float = true,
+      severity = severity,
+    })
   end
 end
 

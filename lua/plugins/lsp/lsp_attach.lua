@@ -87,6 +87,12 @@ function M.configure_server(server, settings)
 
   default_capabilities.textDocument.completion.completionItem = {
     documentationFormat = { 'markdown', 'plaintext' },
+    -- workspace = {
+    --   fileOperations = {
+    --     didRename = true,
+    --     willRename = true,
+    --   },
+    -- },
     snippetSupport = true,
     preselectSupport = true,
     insertReplaceSupport = true,
@@ -176,7 +182,7 @@ function M.configure_server(server, settings)
     --   }, settings or {}))
 
     vim.lsp.config(server, vim.tbl_deep_extend('force', {
-      capabilities = default_capabilities,
+      --capabilities = default_capabilities,
       on_attach = safe_on_attach,
       flags = { debounce_text_changes = 150 },
     }, settings or {}))

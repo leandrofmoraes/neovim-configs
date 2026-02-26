@@ -3,7 +3,7 @@
 -- location.
 return {
   "folke/flash.nvim",
-  enabled = false,
+  enabled = true,
   event = "VeryLazy",
   vscode = true,
   ---@type Flash.Config
@@ -178,7 +178,7 @@ return {
         -- hide after jump when not using jump labels
         autohide = false,
         -- show jump labels
-        jump_labels = false,
+        jump_labels = true,
         -- set to `false` to use the current line only
         multi_line = true,
         -- When using jump labels, don't use these keys
@@ -188,22 +188,23 @@ return {
         -- by removing them from the list.
         -- If you rather use another key, you can map them
         -- to something else, e.g., { [";"] = "L", [","] = H }
+        --keys = { "f", "F", "t", "T", "H", "L" },
         keys = { "f", "F", "t", "T" },
         ---@alias Flash.CharActions table<string, "next" | "prev" | "right" | "left">
         -- The direction for `prev` and `next` is determined by the motion.
         -- `left` and `right` are always left and right.
-        char_actions = function(motion)
-          return {
-            [">"] = "next", -- set to `right` to always go right
-            ["<"] = "prev", -- set to `left` to always go left
-            -- clever-f style
-            [motion:lower()] = "next",
-            [motion:upper()] = "prev",
-            -- jump2d style: same case goes next, opposite case goes prev
-            -- [motion] = "next",
-            -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
-          }
-        end,
+        -- char_actions = function(motion)
+        --   return {
+        --     ["L"] = "next", -- set to `right` to always go right
+        --     ["H"] = "prev", -- set to `left` to always go left
+        --     -- clever-f style
+        --     [motion:lower()] = "next",
+        --     [motion:upper()] = "prev",
+        --     -- jump2d style: same case goes next, opposite case goes prev
+        --     -- [motion] = "next",
+        --     -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
+        --   }
+        -- end,
         search = { wrap = false },
         highlight = { backdrop = true },
         jump = {
@@ -265,11 +266,13 @@ return {
   },
   -- stylua: ignore
   keys = {
-    { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-    { "S",     mode = { "n", "o", "x" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
-    { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
-    { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-    { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    -- { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+    -- { "S",     mode = { "n", "o", "x" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+    { "s",     mode = { "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+    { "S",     mode = { "o", "x" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+    { "r",     mode = "o",          function() require("flash").remote() end,            desc = "Remote Flash" },
+    { "R",     mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+    { "<c-s>", mode = { "c" },      function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
   },
 
 }

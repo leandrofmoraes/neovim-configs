@@ -1,4 +1,4 @@
-local copilot_auto_trigger = true
+local copilot_auto_trigger = false
 
 local function toggle_copilot_suggestions()
   local suggestion = require("copilot.suggestion")
@@ -26,7 +26,7 @@ return {
     opts = {
       suggestion = {
         enabled = true,
-        auto_trigger = true,
+        auto_trigger = false,
         hide_during_completion = true,
         keymap = {
           accept = "<C-Right>", -- handled by nvim-cmp / blink.cmp

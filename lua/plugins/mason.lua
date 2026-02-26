@@ -23,33 +23,33 @@ return {
       ---@type string[]
       ensure_installed = {
         -- Formatters
-        "stylua",               -- Lua
+        "stylua",       -- Lua
         -- "prettier",                 -- JavaScript/TypeScript/HTML/CSS
-        "shfmt",                -- Shell
-        "beautysh",             -- Shell
-        "clang-format",         -- C/C++
-        "cmakelang",            -- CMake
-        "mdformat",             -- Markdown
-        "yamlfmt",              -- YAML
+        "shfmt",        -- Shell
+        "beautysh",     -- Shell
+        "clang-format", -- C/C++
+        "cmakelang",    -- CMake
+        -- "mdformat",             -- Markdown
+        "yamlfmt",      -- YAML
         -- Linters
-        "eslint_d",             -- JavaScript/TypeScript
-        "hadolint",             -- Docker
-        "shellcheck",           -- Shell
-        "yamllint",             -- YAML
+        "eslint_d",     -- JavaScript/TypeScript
+        --"hadolint",             -- Docker
+        "shellcheck",   -- Shell
+        -- "yamllint",             -- YAML
         -- "markdownlint",             -- Markdown
-        "markdownlint-cli2",    -- Markdown
-        "markdown-toc",         -- Markdown
-        "jsonlint",             -- JSON
-        "cpplint",              -- C++
-        "editorconfig-checker", -- EditorConfig
-        "stylelint",            -- CSS
+        -- "markdownlint-cli2",    -- Markdown
+        -- "markdown-toc",         -- Markdown
+        "jsonlint", -- JSON
+        "cpplint",  -- C++
+        -- "editorconfig-checker", -- EditorConfig
+        -- "stylelint",            -- CSS
         -- Debuggers
-        "codelldb",             -- C/C++/Rust
-        "java-debug-adapter",   -- Java
-        "java-test",            -- Java
-        "js-debug-adapter",     -- JavaScript/TypeScript
+        "codelldb",           -- C/C++/Rust
+        "java-debug-adapter", -- Java
+        "java-test",          -- Java
+        "js-debug-adapter",   -- JavaScript/TypeScript
         -- Tools diversas
-        "glow",                 -- Visualizador Markdown
+        -- "glow",                 -- Visualizador Markdown
       },
       -- ---@type boolean
       -- automatic_installation = true,
@@ -77,29 +77,29 @@ return {
     opts = {
       ensure_installed = {
         -- LSP Servers
-        "bashls",   -- Bash
-        "clangd",   -- C/C++
-        "cssls",    -- CSS
-        "dockerls", -- Docker
-        "html",     -- HTML
-        "emmet_ls", -- Emmet
-        "jdtls",    -- Java
-        "jsonls",   -- JSON
-        "lua_ls",   -- Lua
-        "hyprls",
-        "eslint",
-        "marksman",
-        "docker_compose_language_service",
-        "lemminx",
-        "taplo",
-        "html",
+        "bashls", -- Bash
+        "clangd", -- C/C++
+        -- "cssls",    -- CSS
+        -- "dockerls", -- Docker
+        -- "html",     -- HTML
+        -- "emmet_ls", -- Emmet
+        -- "jdtls",    -- Java
+        -- "jsonls", -- JSON
+        "lua_ls", -- Lua
+        -- "hyprls",
+        -- "eslint",
+        -- "marksman",
+        -- "docker_compose_language_service",
+        -- "lemminx", -- XML
+        -- "taplo",     -- TOML
+        -- "html",
         "cmake",
-        "sqlls",       -- SQL
-        "tailwindcss", -- Tailwind CSS
-        "vimls",       -- VimScript
-        "vtsls",       -- JavaScript/TypeScript
+        -- "sqlls",       -- SQL
+        -- "tailwindcss", -- Tailwind CSS
+        "vimls", -- VimScript
+        -- "vtsls",       -- JavaScript/TypeScript
         -- "volar",                    -- Vue (substituto do vtsls)
-        "yamlls",      -- YAML
+        "yamlls", -- YAML
       },
       -- },
       -- config = function()
