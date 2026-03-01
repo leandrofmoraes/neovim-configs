@@ -41,7 +41,7 @@ M.attach = function(args)
   map("n", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr })
   map(
     "n",
-    "<leader>cR",
+    "<leader>cr",
     vim.lsp.buf.rename,
     { buffer = bufnr, desc = "Rename symbol under cursor" }
   )
@@ -54,31 +54,31 @@ M.attach = function(args)
 
   map(
     { "n", "v" },
-    ";gt",
+    "<leader>cg",
     vim.lsp.buf.code_action,
     { buffer = bufnr, desc = "Go to" }
   )
   map(
     "n",
-    ";gt",
+    "<leader>cgt",
     vim.lsp.buf.type_definition,
     { buffer = bufnr, desc = "Go to type definition" }
   )
   map(
     "n",
-    ";gD",
+    "<leader>cgD",
     vim.lsp.buf.declaration,
     { buffer = bufnr, desc = "Go to declaration" }
   )
   map(
     "n",
-    ";gd",
+    "<leader>cgd",
     vim.lsp.buf.definition,
     { buffer = bufnr, desc = "Go to definition" }
   )
   map(
     "n",
-    ";gi",
+    "<leader>cgi",
     vim.lsp.buf.implementation,
     { buffer = bufnr, desc = "Go to implementation" }
   )

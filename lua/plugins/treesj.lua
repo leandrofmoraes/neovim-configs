@@ -24,9 +24,9 @@ return {
   },
   keys = { -- see 'core.keymaps'
     -- stylua: ignore start
-    { 'g/m', function() return require('treesj').toggle() end, desc = 'Toggle' },
-    { 'g/j', function() return require('treesj').join() end,   desc = 'Join' },
-    { 'g/s', function() return require('treesj').split() end,  desc = 'Split' },
+    { ',/m', function() return require('treesj').toggle() end, desc = 'Toggle' },
+    { ',/j', function() return require('treesj').join() end,   desc = 'Join' },
+    { ',/s', function() return require('treesj').split() end,  desc = 'Split' },
     -- stylua: ignore end
   },
 }

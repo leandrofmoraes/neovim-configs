@@ -32,31 +32,50 @@ wk.add({
   -- { "gx", desc = "Open with system app" },
   -- { "g", group = "goto" },
   -- { "z", group = "fold" },
-  { 'gz', group = 'surround', icon = { icon = icons.kind.Namespace, color = 'yellow' } },
+  { ',s',  group = 'Surround',             icon = { icon = icons.kind.Namespace, color = 'yellow' } },
+  { ',sa', desc = 'Add surrounding' },
+  { ',sh', group = 'Highlight surrounding' },
+  { ',sd', group = 'Delete surrounding' },
+  { ',sr', group = 'Replace surrounding' },
+  { ',sf', group = 'Find surrounding' },
 })
 
 wk.add({
   mode = { 'v', 'n' },
-  { 'gM', group = 'Markdown', icon = { icon = require('utils.icons').misc.Markdown, color = 'green' } },
+  { ',M', group = 'Markdown', icon = { icon = require('utils.icons').misc.Markdown, color = 'green' } },
 })
 wk.add({ mode = { 'v', 'n' }, { 'gm', group = 'Multicursors', icon = { icon = icons.ui.Cursor, color = 'green' } } })
 wk.add({
-  mode = { 'v', 'n', 'x' },
-  { 'gr', group = 'Replace', icon = { icon = icons.kind.Reference, color = 'green' } },
+  mode = { 'v', 'n' },
+  { ',r', group = 'Replace', icon = { icon = icons.kind.Reference, color = 'green' } },
 })
+-- operador-pending / normal / visual onde aplicável
 wk.add({
   mode = 'n',
-  { 'go', icon = { icon = icons.ui.HorizontalLine, color = 'orange' } },
-  { 'gO', icon = { icon = icons.ui.HorizontalLine, color = 'orange' } },
-  { 'g=', icon = { icon = icons.ui.Indent, color = 'green' } },
-  { 'ga', icon = { icon = icons.ui.SelectAll, color = 'green' } },
-  { 'gw', icon = { icon = icons.ui.Word, color = 'green' } },
-  { 'vw', icon = { icon = icons.ui.Word, color = 'green' } },
-  { 'gh', icon = { icon = icons.kind.Color, color = 'orange' } },
-  { 'gH', icon = { icon = icons.kind.Color, color = 'orange' } },
-  { 'gx', desc = 'Open file/URL' }, -- better descriptions
-  { ';g', group = 'Go to', icon = { icon = '', color = 'yellow' } },
-  { 'g/', group = 'Split/Join', icon = { icon = icons.ui.Code, color = 'orange' } },
+  { ',o', icon = { icon = icons.ui.HorizontalLine, color = 'orange' } },
+  { ',O', icon = { icon = icons.ui.HorizontalLine, color = 'orange' } },
+  { ',=', icon = { icon = icons.ui.Indent, color = 'green' } },
+  { ',a', icon = { icon = icons.ui.SelectAll, color = 'green' } },
+  --{ 'gw', icon = { icon = icons.ui.Word, color = 'green' } },
+  --{ 'vw', icon = { icon = icons.ui.Word, color = 'green' } },
+  { ',h', icon = { icon = icons.kind.Color, color = 'orange' } },
+  { ',H', icon = { icon = icons.kind.Color, color = 'orange' } },
+  { ',x', desc = 'Open file/URL' }, -- better descriptions
+  { '<leader>cg', group = 'Go to', icon = { icon = '', color = 'yellow' } },
+  { ',/', group = 'Split/Join', icon = { icon = icons.ui.Code, color = 'orange' } },
+  { ',m', group = 'Multicursors', icon = { icon = icons.ui.Cursor } },
+})
+
+wk.add({
+  mode = { 'n', 'v' },
+  { 'yi', group = 'Yank inner' },
+  { 'ya', group = 'Yank arround' },
+  { 'vi', group = 'Select inner' },
+  { 'va', group = 'Select arround' },
+  { 'ci', group = 'Change inner' },
+  { 'ca', group = 'Change arround' },
+  { 'di', group = 'Delete inner' },
+  { 'da', group = 'Delete arround' },
 })
 
 ------------------------------------------------------
@@ -66,7 +85,7 @@ wk.add({
   { '<leader>!', icon = { icon = '', hl = 'WhichKeyIconOrange' } },
   { '<leader>e', icon = { icon = icons.kind.Class, color = 'green' } },
   { '<leader>h', icon = { icon = icons.kind.Color, color = 'orange' } },
-  { '<leader>P', icon = { icon = icons.misc.Package, hl = 'WhichKeyIconOrange' } },
+  { '<leader>P', group = 'Plugins', icon = { icon = icons.misc.Package, hl = 'WhichKeyIconOrange' } },
   { '<leader>r', icon = { icon = icons.ui.Refresh, color = 'green' } },
   { '<leader>c', group = 'Code' },
   { '<leader>cx', group = 'Extract' },
@@ -99,14 +118,14 @@ wk.add({
   { ';S', icon = { icon = icons.ui.Tree, color = 'green' } },
   { ';f', group = 'Search' },
   { ';G', group = 'Git' },
-  { ';l', group = 'Legendary', icon = { icon = icons.ui.Search, color = 'blue' } },
+  { ';l', group = 'Legendary',                                  icon = { icon = icons.ui.Search, color = 'blue' } },
 })
 
 -- Yank.nvim
 wk.add({
-  { 'y', icon = { icon = icons.ui.Clipboard, color = 'orange' } },
-  { 'p', icon = { icon = icons.ui.Clipboard, color = 'orange' } },
-  { 'P', icon = { icon = icons.ui.Clipboard, color = 'orange' } },
+  { 'y',  icon = { icon = icons.ui.Clipboard, color = 'orange' } },
+  { 'p',  icon = { icon = icons.ui.Clipboard, color = 'orange' } },
+  { 'P',  icon = { icon = icons.ui.Clipboard, color = 'orange' } },
   { '=p', icon = { icon = icons.ui.Clipboard, color = 'orange' } },
   { '=P', icon = { icon = icons.ui.Clipboard, color = 'orange' } },
   { '[y', icon = { icon = icons.ui.Clipboard, color = 'orange' } },

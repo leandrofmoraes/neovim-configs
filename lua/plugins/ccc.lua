@@ -38,9 +38,9 @@ return {
     end,
     keys = function()
       return {
-        { "gh",        "<cmd>CccPick<cr>",              mode = { 'n', 'v' }, desc = "Color Pick" },
-        { "gH",        "<cmd>CccConvert<cr>",           mode = { 'n', 'v' }, desc = "Color Convert" },
-        { "<leader>h", "<cmd>CccHighlighterToggle<cr>", mode = { 'n' },    desc = "Highlight Colors" },
+        { ",h",        "<cmd>CccPick<cr>",              mode = { 'n', 'v' }, desc = "Color Pick" },
+        { ",H",        "<cmd>CccConvert<cr>",           mode = { 'n', 'v' }, desc = "Color Convert" },
+        { "<leader>h", "<cmd>CccHighlighterToggle<cr>", mode = { 'n' },      desc = "Highlight Colors" },
         -- { "gC", require("ccc").mapping.complete(), { mode = {'n', 'v'}, desc = "Color Pick"}}
       }
     end

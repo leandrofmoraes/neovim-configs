@@ -75,13 +75,13 @@ map('x', 'J', ":move '>+1<CR>gv=gv", {})
 -- Map <leader>o & <leader>O to newline without insert mode
 map(
   'n',
-  'go',
+  ',o',
   [[:<C-u>call append(line("."), repeat([""], v:count1))<CR>]],
   { silent = true, desc = 'newline below (no insert-mode)' }
 )
 map(
   'n',
-  'gO',
+  ',O',
   [[:<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>]],
   { silent = true, desc = 'newline above (no insert-mode)' }
 )
@@ -146,7 +146,7 @@ map('n', ';GS', finder.git_stash, { desc = 'git stash' })
 ------------------------------------------------------
 -- Lazy keymap (Plugin Manager)
 ------------------------------------------------------
-map('n', '<leader>P', '<cmd>Lazy<CR>', { desc = 'Plugins' })
+--map('n', '<leader>P', '<cmd>Lazy<CR>', { desc = 'Plugins' })
 map('n', '<leader>Pi', '<cmd>Lazy install<cr>', { desc = 'Install' })
 map('n', '<leader>Ps', '<cmd>Lazy sync<cr>', { desc = 'Sync' })
 map('n', '<leader>PS', '<cmd>Lazy clear<cr>', { desc = 'Status' })
@@ -353,11 +353,11 @@ map('n', ';k', '<cmd>norm! K<cr>', { desc = 'Keywordprg' })
 
 -- select all with Crtl+a
 map('n', '<C-a>', 'ggVG', { desc = 'Select all' })
-map('n', 'ga', 'ggVG', { desc = 'Select all' })
+map('n', ',a', 'ggVG', { desc = 'Select all' })
 
 -- select word under cursor
-map('n', 'gw', 'viw', { silent = true, desc = 'Select word' })
-map('n', 'vw', 'viw', { silent = true, desc = 'Select word' })
+-- map('n', 'gw', 'viw', { silent = true, desc = 'Select word' })
+-- map('n', 'vw', 'viw', { silent = true, desc = 'Select word' })
 
 -- Fix indenting
 local indent_all = function()
@@ -366,7 +366,7 @@ local indent_all = function()
   vim.api.nvim_win_set_cursor(0, pos)
 end
 
-map('n', 'g=', indent_all, { desc = 'Indent all' })
+map('n', ',=', indent_all, { desc = 'Indent all' })
 map('n', '<C-=>', indent_all, { desc = 'Indent all' })
 
 -- Refactoring
@@ -387,18 +387,18 @@ map('n', '<C-=>', indent_all, { desc = 'Indent all' })
 
 map(
   'x',
-  'grk',
+  ',rk',
   ':s/\\(.*\\)/\\1<left><left><left><left><left><left><left><left><left>',
   { desc = 'Capture group (\\1)' }
 )
 map(
   'n',
-  'grk',
+  ',rk',
   ':s/\\(.*\\)/\\1<left><left><left><left><left><left><left><left><left>',
   { desc = 'Line capture (\\1)' }
 )
-map('v', 'gre', '"hy:%s/<C-r>h/<C-r>h/gc<left><left><left>', { desc = 'Replace selection (confirm)' })
-map('n', 'gre', ':%s/<C-r><C-w>/<C-r><C-w>/gcI<Left><Left><Left><Left>', { desc = 'Replace word (ci)' })
+map('v', ',re', '"hy:%s/<C-r>h/<C-r>h/gc<left><left><left>', { desc = 'Replace selection (confirm)' })
+map('n', ',re', ':%s/<C-r><C-w>/<C-r><C-w>/gcI<Left><Left><Left><Left>', { desc = 'Replace word (ci)' })
 ------------------------------------------------------
 -- diagnostics and quickfix
 ------------------------------------------------------

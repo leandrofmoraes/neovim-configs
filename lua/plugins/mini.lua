@@ -82,13 +82,13 @@ return {
       -- Duration (in ms) of highlight when calling `MiniSurround.highlight()`
       highlight_duration = 500,
       mappings = {
-        add = 'gza',            -- Add surrounding in Normal and Visual modes
-        delete = 'gzd',         -- Delete surrounding
-        find = 'gzf',           -- Find surrounding (to the right)
-        find_left = 'gzF',      -- Find surrounding (to the left)
-        highlight = 'gzh',      -- Highlight surrounding
-        replace = 'gzr',        -- Replace surrounding
-        update_n_lines = 'gzn', -- Update `n_lines`
+        add            = ',sa', -- Add surrounding in Normal and Visual modes
+        delete         = ',sd', -- Delete surrounding
+        find           = ',sf', -- Find surrounding (to the right)
+        find_left      = ',sF', -- Find surrounding (to the left)
+        highlight      = ',sh', -- Highlight surrounding
+        replace        = ',sr', -- Replace surrounding
+        update_n_lines = ',sn', -- Update `n_lines`
       },
       -- keys = {
       --   { "gs", "", desc = "+surround" },
@@ -112,15 +112,14 @@ return {
       -- idle time if user input is required.
       silent = false,
     },
-    keys = {
-      { 'gza', mode = { 'n', 'v' },            desc = 'Add surrounding' },
-      { 'gzd', desc = 'Delete surrounding' },
-      { 'gzf', desc = 'Find right surrounding' },
-      { 'gzF', desc = 'Find left surrounding' },
-      { 'gzh', desc = 'Highlight surrounding' },
-      { 'gzr', desc = 'Replace surrounding' },
-      { 'gzn', desc = 'Updated n_lines' },
-    },
+    -- keys = {
+    --{ ',sa', mode = { 'n', 'v' }, desc = 'Add surrounding' },
+    --{ ',sd', mode = { 'n', 'v' }, desc = 'Delete surrounding' },
+    --{ ',sf', mode = { 'n', 'v' }, desc = 'Find right surrounding' },
+    --{ ',sF', mode = { 'n', 'v' }, desc = 'Find left surrounding' },
+    --{ ',sr', mode = { 'n', 'v' }, desc = 'Replace surrounding' },
+    -- { ',sn', mode = { 'n', 'v' }, desc = 'Updated n_lines' },
+    -- },
   },
 
   -- mini.splitjoin

@@ -44,7 +44,9 @@ return {
     -- local lspconfig = require('lspconfig')
     local configure_server = require("plugins.lsp.lsp_attach").configure_server
 
-    -- load custom server configurations
+    ---------------------------------------
+    -- Custom Server Configurations --
+    ---------------------------------------
     --configure_server('arduino_language_server', require("plugins.lsp.languages.arduino_language_server").arduino)
     -- configure_server( 'marksman', require("plugins.lsp.languages.marksman").markdown)
 

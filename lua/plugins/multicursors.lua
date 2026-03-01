@@ -53,13 +53,13 @@ return {
     -- },
     {
       mode = { 'v', 'n' },
-      'gm/',
+      ',m/',
       '<cmd>MCpattern<cr>',
       desc = 'Select every match in the buffer.',
     },
     {
       mode = { 'v', 'n' },
-      'gmm',
+      ',mm',
       '<cmd>MCunderCursor<cr>',
       desc = 'Select the char under the cursor',
     },

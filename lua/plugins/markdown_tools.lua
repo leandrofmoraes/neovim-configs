@@ -226,10 +226,10 @@ return {
       require('markdowny').setup({ filetypes = { 'markdown', 'txt' } })
     end,
     keys = {
-      { 'gmb', ":lua require('markdowny').bold()<cr>", mode = 'v', desc = 'Markdown Bold' },
-      { 'gmi', ":lua require('markdowny').italic()<cr>", mode = 'v', desc = 'Markdown Italic' },
-      { 'gml', ":lua require('markdowny').link()<cr>", mode = 'v', desc = 'Markdown Link' },
-      { 'gmc', ":lua require('markdowny').code()<cr>", mode = 'v', desc = 'Markdown Code' },
+      { ',Mb', ":lua require('markdowny').bold()<cr>",   mode = 'v', desc = 'Markdown Bold' },
+      { ',Mi', ":lua require('markdowny').italic()<cr>", mode = 'v', desc = 'Markdown Italic' },
+      { ',Ml', ":lua require('markdowny').link()<cr>",   mode = 'v', desc = 'Markdown Link' },
+      { ',Mc', ":lua require('markdowny').code()<cr>",   mode = 'v', desc = 'Markdown Code' },
     },
   },
 }

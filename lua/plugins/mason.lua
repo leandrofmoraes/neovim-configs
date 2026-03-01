@@ -75,32 +75,32 @@ return {
     dependencies = "mason.nvim",
     cmd = { "LspInstall", "LspUninstall" },
     opts = {
-      ensure_installed = {
-        -- LSP Servers
-        "bashls", -- Bash
-        "clangd", -- C/C++
-        -- "cssls",    -- CSS
-        -- "dockerls", -- Docker
-        -- "html",     -- HTML
-        -- "emmet_ls", -- Emmet
-        -- "jdtls",    -- Java
-        -- "jsonls", -- JSON
-        "lua_ls", -- Lua
-        -- "hyprls",
-        -- "eslint",
-        -- "marksman",
-        -- "docker_compose_language_service",
-        -- "lemminx", -- XML
-        -- "taplo",     -- TOML
-        -- "html",
-        "cmake",
-        -- "sqlls",       -- SQL
-        -- "tailwindcss", -- Tailwind CSS
-        "vimls", -- VimScript
-        -- "vtsls",       -- JavaScript/TypeScript
-        -- "volar",                    -- Vue (substituto do vtsls)
-        "yamlls", -- YAML
-      },
+      -- ensure_installed = {
+      -- LSP Servers
+      -- "bashls", -- Bash
+      -- "clangd", -- C/C++
+      -- "cssls",    -- CSS
+      -- "dockerls", -- Docker
+      -- "html",     -- HTML
+      -- "emmet_ls", -- Emmet
+      -- "jdtls",    -- Java
+      -- "jsonls", -- JSON
+      -- "lua_ls", -- Lua
+      -- "hyprls",
+      -- "eslint",
+      -- "marksman",
+      -- "docker_compose_language_service",
+      -- "lemminx", -- XML
+      -- "taplo",     -- TOML
+      -- "html",
+      -- "cmake",
+      -- "sqlls",       -- SQL
+      -- "tailwindcss", -- Tailwind CSS
+      -- "vimls", -- VimScript
+      -- "vtsls",       -- JavaScript/TypeScript
+      -- "volar",                    -- Vue (substituto do vtsls)
+      -- "yamlls", -- YAML
+      --},
       -- },
       -- config = function()
       --   require("mason-lspconfig").setup()
@@ -129,13 +129,13 @@ return {
       ensure_installed = {
         -- you can turn off/on auto_update per tool
         -- LSPs
-        "bashls",
-        "lua_ls",
-        "vimls",
-        "lua_ls",
-        "clangd",
+        --"bashls",
+        --"lua_ls",
+        --"vimls",
+        --"lua_ls",
+        --"clangd",
         -- Formatters/Linters
-        "stylua",
+        -- "stylua",
         -- "prettier",
         -- "eslint_d",
         -- "marksman",

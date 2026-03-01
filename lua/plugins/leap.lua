@@ -6,9 +6,9 @@ return {
     enabled = false,
     dependencies = { 'tpope/vim-repeat', keys = { '.' } },
     keys = {
-      { 's',  mode = { 'n', 'x', 'o' }, desc = 'Leap forward to' },
-      { 'S',  mode = { 'n', 'x', 'o' }, desc = 'Leap backward to' },
-      { 'gW', mode = { 'n', 'x', 'o' }, desc = 'Leap from windows' },
+      { 's', mode = { 'n', 'x', 'o' }, desc = 'Leap forward to' },
+      { 'S', mode = { 'n', 'x', 'o' }, desc = 'Leap backward to' },
+      --{ 'gW', mode = { 'n', 'x', 'o' }, desc = 'Leap from windows' },
     },
     modes = {
       char = {

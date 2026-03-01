@@ -7,6 +7,9 @@ return {
     'saghen/blink.cmp',
     --version = '0.*',
     cond = vim.g.my_active_completion == "blink", --Condição de carregamento
+    --build = 'cargo +nightly build --release',
+    -- event = 'InsertEnter',
+    event = { 'InsertEnter', 'CmdlineEnter' },
     dependencies = {
       -- "LuaSnip",
       "moyiz/blink-emoji.nvim",
@@ -62,9 +65,6 @@ return {
         }
       },
     },
-    build = 'cargo +nightly build --release',
-    -- event = 'InsertEnter',
-    event = { 'InsertEnter', 'CmdlineEnter' },
     opts = {
       keymap = {
         ['<CR>'] = { 'accept', 'fallback' },
